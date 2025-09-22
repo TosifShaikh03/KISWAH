@@ -1,12 +1,12 @@
 // Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDzLwzsVFNaePJxTlYC0j49Bxs9PQswAxQ",
-    authDomain: "delever-949b2.firebaseapp.com",
-    projectId: "delever-949b2",
-    storageBucket: "delever-949b2.firebasestorage.app",
-    messagingSenderId: "605444558791",
-    appId: "1:605444558791:web:374430be1c0a06170213e2",
-    measurementId: "G-EXFJNWLJ0Z"
+   apiKey: "AIzaSyDiCRubvpqNlkEdbiZxLNi6uvw12MM6QFI",
+  authDomain: "kiswah-120c0.firebaseapp.com",
+  projectId: "kiswah-120c0",
+  storageBucket: "kiswah-120c0.firebasestorage.app",
+  messagingSenderId: "236816406918",
+  appId: "1:236816406918:web:015f026bcec53fbb9af407",
+  measurementId: "G-3T9KJ1QCPJ"
 };
 
 // Initialize Firebase
@@ -1048,4 +1048,5 @@ Items:`;
     });
 
     alert(orderDetails);
+
 }
