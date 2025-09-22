@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KISWAH - Premium Clothing Brand</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <!-- Firebase App (core) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container header-main">
+            <a href="#" class="logo" onclick="showHomePage()">Kiswah</a>
+
+            <div class="header-actions">
+
+                <div class="action-item" onclick="openAuthModal()">
+                    <i class="fas fa-user"></i>
+                    <span id="auth-text">Account</span>
+                </div>
+                <div class="action-item" onclick="showWishlistPage()" style="position: relative;">
+                    <i class="fas fa-heart"></i>
+                    <span>Wishlist</span>
+                    <span class="wishlist-count">0</span>
+                </div>
+                <div class="action-item" onclick="showCartPage()" style="position: relative;">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Cart</span>
+                    <span class="cart-count">0</span>
+                </div>
+                <div class="action-item" id="admin-link" style="display: none;" onclick="showAdminPanel()">
+                    <i class="fas fa-cog"></i>
+                    <span>Admin</span>
+                </div>
+            </div>
+            <!-- User info displayed when logged in -->
+            <div id="user-info" class="user-info" style="display: none;">
+                <i class="fas fa-user"></i>
+                <span id="user-name">User Name</span>
+            </div>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="#">New Arrivals</a></li>
+            <li><a href="#">Men</a></li>
+            <li><a href="#">Women</a></li>
+            <li><a href="#">Accessories</a></li>
+            <li><a href="#">Collections</a></li>
+            <li><a href="#">Sale</a></li>
+        </ul>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container hero-content">
+                <h1>Elevate Your Style with KISWAH</h1>
+                <p>Discover our latest collection of premium clothing designed for the modern individual who values
+                    quality
+                    and style.</p>
+                <a href="#" class="btn" id="scrollBtn">Shop Now</a>
+            </div>
+        </section>
+
+        <!-- Featured Products -->
+        <section class="container" id="products-section">
+            <h2 class="section-title" id="container">Featured Products</h2>
+            <div class="products" id="products-container">
+                <!-- Products will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature">
+                        <i class="fas fa-truck"></i>
+                        <h3>Free Shipping</h3>
+                        <p>Free shipping on all orders over ₹ 5000</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-undo"></i>
+                        <h3>Easy Returns</h3>
+                        <p>30-day money-back guarantee</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Secure Payment</h3>
+                        <p>All transactions are secure and encrypted</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-headset"></i>
+                        <h3>24/7 Support</h3>
+                        <p>Dedicated customer support</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section class="newsletter">
+            <div class="container">
+                <h2>Subscribe to Our Newsletter</h2>
+                <p>Stay updated with our latest collections, exclusive offers, and fashion tips.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Your email address">
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Wishlist Page -->
+    <section id="wishlist-page" class="wishlist-page container">
+        <h2 class="section-title">My Wishlist</h2>
+        <div class="wishlist-grid" id="wishlist-container">
+            <!-- Wishlist items will be dynamically added here -->
+        </div>
+        <div class="empty-wishlist" id="empty-wishlist">
+            <i class="far fa-heart"></i>
+            <p>Your wishlist is empty</p>
+            <a href="#" class="btn" onclick="showHomePage()">Continue Shopping</a>
+        </div>
+    </section>
+
+    <!-- Cart Page -->
+    <section id="cart-page" class="cart-page container">
+        <h2 class="section-title">Shopping Cart</h2>
+        <div class="cart-items" id="cart-items-container">
+            <!-- Cart items will be dynamically added here -->
+        </div>
+        <div class="cart-summary">
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span id="cart-subtotal">₹ 0.00</span>
+            </div>
+            <!-- <div class="summary-row">
+                <span>Shipping</span>
+                <span id="cart-shipping">₹ 0.00</span>
+            </div> -->
+            <div class="summary-row summary-total">
+                <span>Total</span>
+                <span id="cart-total">₹ 0.00</span>
+            </div>
+            <!-- In the cart page section, add these fields before the checkout button -->
+            <div class="checkout-form" id="checkout-form" style="display: none;">
+                <h3>Shipping Information</h3>
+                <div class="form-group">
+                    <label for="checkout-phone">Phone Number</label>
+                    <input type="tel" id="checkout-phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="checkout-address">Shipping Address</label>
+                    <textarea id="checkout-address" rows="3" required></textarea>
+                </div>
+            </div>
+            <button class="checkout-btn" onclick="showCheckoutForm()">Proceed to Checkout</button>
+        </div>
+        <div class="empty-cart" id="empty-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <p>Your cart is empty</p>
+            <a href="#" class="btn" onclick="showHomePage()">Continue Shopping</a>
+        </div>
+    </section>
+
+    <!-- Admin Panel -->
+    <section id="admin-panel" class="admin-panel container">
+        <div class="admin-header">
+            <h2 class="section-title">Admin Dashboard</h2>
+            <button class="btn" onclick="showHomePage()">Back to Store</button>
+        </div>
+
+        <div class="stats-grid" id="admin-stats">
+            <!-- Stats will be dynamically loaded here -->
+        </div>
+
+        <div class="admin-tabs">
+            <div class="admin-tab active" onclick="switchAdminTab('products')">Products</div>
+            <div class="admin-tab" onclick="switchAdminTab('orders')">Orders</div>
+            <div class="admin-tab" onclick="switchAdminTab('users')">Users</div>
+            <div class="admin-tab" onclick="switchAdminTab('add-product')">Add Product</div>
+        </div>
+
+        <div id="admin-products" class="admin-content active">
+            <h3>Product Management</h3>
+            <!-- In the admin orders table -->
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Color</th>
+                        <th>Size</th>
+                        <th>Material</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="admin-products-list">
+                    <!-- Products will be dynamically loaded here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="admin-orders" class="admin-content">
+            <h3>Order Management</h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-orders-list">
+                    <!-- Orders will be dynamically loaded here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="admin-users" class="admin-content">
+            <h3>User Management</h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Joined</th>
+                        <th>Orders</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-users-list">
+                    <!-- Users will be dynamically loaded here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="admin-add-product" class="admin-content">
+            <h3>Add New Product</h3>
+            <form class="admin-form" id="add-product-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="product-name">Product Name</label>
+                        <input type="text" id="product-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-price">Price (₹ )</label>
+                        <input type="number" id="product-price" step="0.01" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="product-stock">Stock Quantity</label>
+                        <input type="number" id="product-stock" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-color">Color</label>
+                        <input type="text" id="product-color" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="product-size">Size</label>
+                        <input type="text" id="product-size" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-material">Material</label>
+                        <input type="text" id="product-material" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="product-image">Image URL</label>
+                    <input type="url" id="product-image" required>
+                </div>
+                <button type="submit" class="form-submit">Add Product</button>
+            </form>
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>KISWAH</h3>
+                    <p>139, Dr Sabne Rd, Mahabaleshwar, Maharashtra 412806</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Shop</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Men's Collection</a></li>
+                        <li><a href="#">Women's Collection</a></li>
+                        <li><a href="#">Accessories</a></li>
+                        <li><a href="#">New Arrivals</a></li>
+                        <li><a href="#">Sale</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                             <li><a href="about-us.html">About Us</a></li>
+                        <li><a href="contact-us.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Shipping & Returns</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 KISWAH. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAuthModal()">&times;</span>
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchAuthTab('login')">Login</div>
+                <div class="auth-tab" onclick="switchAuthTab('register')">Register</div>
+                <div class="auth-tab hid" onclick="switchAuthTab('admin')">Admin Login</div>
+            </div>
+            <form id="login-form" class="auth-form active">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="form-submit">Login</button>
+            </form>
+            <!--  -->
+            <!-- In the registration form section -->
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="register-name">Full Name</label>
+                    <input type="text" id="register-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-phone">Phone Number</label>
+                    <input type="tel" id="register-phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-address">Address</label>
+                    <textarea id="register-address" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm">Confirm Password</label>
+                    <input type="password" id="register-confirm" required>
+                </div>
+                <button type="submit" class="form-submit">Register</button>
+            </form>
+            <!--  -->
+            <form id="admin-form" class="auth-form hid">
+                <div class="form-group">
+                    <label for="admin-email">Admin Email</label>
+                    <input type="email" id="admin-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="admin-password">Password</label>
+                    <input type="password" id="admin-password" required>
+                </div>
+                <button type="submit" class="form-submit">Login as Admin</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
