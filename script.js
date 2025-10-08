@@ -42,12 +42,14 @@ let products = [];
 let orders = [];
 let users = [];
 
-// Demo products data as fallback
+// Demo products data with discount support
 const demoProducts = [
     {
         id: 'demo-1',
         name: 'Classic White Shirt',
         price: 2499.99,
+        discount: 10,
+        salePrice: 2249.99,
         images: [
             'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&h=600&fit=crop',
             'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&h=600&fit=crop',
@@ -62,6 +64,8 @@ const demoProducts = [
         id: 'demo-2',
         name: 'Premium Denim Jacket',
         price: 4599.99,
+        discount: 15,
+        salePrice: 3909.99,
         images: [
             'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&h=600&fit=crop',
             'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=500&h=600&fit=crop',
@@ -74,6 +78,31 @@ const demoProducts = [
     }
 ];
 
+// Discount calculation functions
+function calculateSalePrice(originalPrice, discountPercent) {
+    if (discountPercent > 0) {
+        return originalPrice - (originalPrice * discountPercent / 100);
+    }
+    return originalPrice;
+}
+
+function updateSalePrice() {
+    const originalPrice = parseFloat(document.getElementById('product-price').value) || 0;
+    const discountPercent = parseFloat(document.getElementById('product-discount').value) || 0;
+    const salePrice = calculateSalePrice(originalPrice, discountPercent);
+    document.getElementById('product-sale-price').value = salePrice.toFixed(2);
+}
+
+function setupDiscountListeners() {
+    const priceInput = document.getElementById('product-price');
+    const discountInput = document.getElementById('product-discount');
+    
+    if (priceInput && discountInput) {
+        priceInput.addEventListener('input', updateSalePrice);
+        discountInput.addEventListener('input', updateSalePrice);
+    }
+}
+
 // Initialize the application
 function initApp() {
     // Initialize products container display
@@ -81,6 +110,24 @@ function initApp() {
     if (productsContainer) {
         productsContainer.style.display = 'none';
     }
+
+    // Setup hamburger menu
+    const hamburger = document.getElementById('hamburger');
+    if (hamburger) {
+        hamburger.addEventListener('click', toggleMobileMenu);
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        
+        if (navLinks && navLinks.classList.contains('active') && 
+            !hamburger.contains(e.target) && 
+            !navLinks.contains(e.target)) {
+            closeMobileMenu();
+        }
+    });
 
     // Check if user is logged in
     auth.onAuthStateChanged(user => {
@@ -93,6 +140,11 @@ function initApp() {
             currentUser = null;
             isAdmin = false;
             adminLink.style.display = 'none';
+            // Hide mobile admin link too
+            const adminLinkMobile = document.getElementById('admin-link-mobile');
+            if (adminLinkMobile) {
+                adminLinkMobile.style.display = 'none';
+            }
             userInfo.style.display = 'none';
             authText.textContent = 'Account';
             loadLocalData();
@@ -123,10 +175,15 @@ function setupEventListeners() {
     document.querySelector('.action-item').addEventListener('click', handleAccountClick);
 
     // Product form
-    addProductForm.addEventListener('submit', handleProductSubmit);
+    if (addProductForm) {
+        addProductForm.addEventListener('submit', handleProductSubmit);
+    }
 
     // Newsletter
-    document.querySelector('.newsletter-form').addEventListener('submit', handleNewsletter);
+    const newsletterForm = document.querySelector('.newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', handleNewsletter);
+    }
 
     // Close modal when clicking outside
     window.addEventListener('click', function (e) {
@@ -136,12 +193,25 @@ function setupEventListeners() {
     });
 
     // Scroll to products
-    document.getElementById("scrollBtn").addEventListener("click", function () {
-        document.getElementById("products-section").scrollIntoView({
-            behavior: "smooth",
-            block: "start"
+    const scrollBtn = document.getElementById("scrollBtn");
+    if (scrollBtn) {
+        scrollBtn.addEventListener("click", function () {
+            document.getElementById("products-section").scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
         });
+    }
+
+    // Close mobile menu on window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            closeMobileMenu();
+        }
     });
+
+    // Setup discount listeners
+    setupDiscountListeners();
 }
 
 // Update UI with user information
@@ -164,17 +234,32 @@ function checkAdminStatus(uid) {
             if (doc.exists) {
                 isAdmin = true;
                 adminLink.style.display = 'flex';
+                // Show mobile admin link too
+                const adminLinkMobile = document.getElementById('admin-link-mobile');
+                if (adminLinkMobile) {
+                    adminLinkMobile.style.display = 'block';
+                }
                 // Load admin-specific data
                 loadAdminData();
             } else {
                 isAdmin = false;
                 adminLink.style.display = 'none';
+                // Hide mobile admin link too
+                const adminLinkMobile = document.getElementById('admin-link-mobile');
+                if (adminLinkMobile) {
+                    adminLinkMobile.style.display = 'none';
+                }
             }
         })
         .catch(error => {
             console.error("Error checking admin status: ", error);
             isAdmin = false;
             adminLink.style.display = 'none';
+            // Hide mobile admin link too
+            const adminLinkMobile = document.getElementById('admin-link-mobile');
+            if (adminLinkMobile) {
+                adminLinkMobile.style.display = 'none';
+            }
         });
 }
 
@@ -194,6 +279,10 @@ function loadProducts() {
                 // Ensure backward compatibility with single color
                 if (productData.color && !productData.colors) {
                     productData.colors = [productData.color];
+                }
+                // Calculate sale price if discount exists but salePrice doesn't
+                if (productData.discount && productData.discount > 0 && !productData.salePrice) {
+                    productData.salePrice = calculateSalePrice(productData.price, productData.discount);
                 }
                 products.push({ id: doc.id, ...productData });
             });
@@ -324,6 +413,9 @@ function loadUserData() {
         .catch(error => {
             console.error("Error loading cart: ", error);
         });
+
+    // Load shipping info
+    loadShippingInfo();
 }
 
 // Load data from local storage (for non-logged in users)
@@ -356,6 +448,8 @@ function showHomePage() {
     wishlistPage.style.display = 'none';
     cartPage.style.display = 'none';
     adminPanel.style.display = 'none';
+    ordersPage.style.display = 'none';
+    closeMobileMenu();
 }
 
 function showWishlistPage() {
@@ -368,7 +462,9 @@ function showWishlistPage() {
     wishlistPage.style.display = 'block';
     cartPage.style.display = 'none';
     adminPanel.style.display = 'none';
+    ordersPage.style.display = 'none';
     renderWishlist();
+    closeMobileMenu();
 }
 
 function showCartPage() {
@@ -381,7 +477,10 @@ function showCartPage() {
     wishlistPage.style.display = 'none';
     cartPage.style.display = 'block';
     adminPanel.style.display = 'none';
+    ordersPage.style.display = 'none';
     renderCart();
+    loadShippingInfo();
+    closeMobileMenu();
 }
 
 function showAdminPanel() {
@@ -394,7 +493,9 @@ function showAdminPanel() {
     wishlistPage.style.display = 'none';
     cartPage.style.display = 'none';
     adminPanel.style.display = 'block';
+    ordersPage.style.display = 'none';
     updateAdminStats();
+    closeMobileMenu();
 }
 
 // Auth Modal Functions
@@ -421,6 +522,11 @@ function switchAdminTab(tabName) {
 
     document.querySelector(`.admin-tab:nth-child(${tabName === 'products' ? 1 : tabName === 'orders' ? 2 : tabName === 'users' ? 3 : 4})`).classList.add('active');
     document.getElementById(`admin-${tabName}`).classList.add('active');
+    
+    // Refresh the products table when switching to products tab
+    if (tabName === 'products') {
+        updateAdminProducts();
+    }
 }
 
 // Product Functions
@@ -431,7 +537,6 @@ function toggleProductDetails(productId) {
     }
 }
 
-// Image slider functions
 // Image slider functions - Manual only (no auto-slide)
 function initImageSlider(productId, images) {
     const slider = document.getElementById(`image-slider-${productId}`);
@@ -475,8 +580,6 @@ function initImageSlider(productId, images) {
     dots.forEach((dot, index) => {
         dot.onclick = () => showSlide(index);
     });
-
-    // Auto-slide feature REMOVED - no setInterval here
 }
 
 function toggleWishlist(button, productId) {
@@ -521,6 +624,7 @@ function toggleWishlist(button, productId) {
     }
 
     updateWishlistCount();
+    saveLocalData();
 }
 
 function addToCart(productId) {
@@ -531,6 +635,9 @@ function addToCart(productId) {
 
     const product = products.find(p => p.id === productId);
     if (!product) return;
+
+    // Use sale price if available, otherwise use regular price
+    const price = product.salePrice || product.price;
 
     const existingItem = cart.find(item => item.id === productId);
 
@@ -549,7 +656,7 @@ function addToCart(productId) {
         cart.push({
             id: productId,
             name: product.name,
-            price: product.price,
+            price: price,
             image: product.images ? product.images[0] : product.image,
             quantity: 1
         });
@@ -557,7 +664,7 @@ function addToCart(productId) {
         if (currentUser) {
             db.collection('users').doc(currentUser.uid).collection('cart').doc(productId).set({
                 name: product.name,
-                price: product.price,
+                price: price,
                 image: product.images ? product.images[0] : product.image,
                 quantity: 1,
                 addedAt: new Date()
@@ -569,6 +676,7 @@ function addToCart(productId) {
     }
 
     updateCartCount();
+    saveLocalData();
     showNotification('Product added to cart!');
 }
 
@@ -584,6 +692,7 @@ function removeFromCart(productId) {
 
     renderCart();
     updateCartCount();
+    saveLocalData();
 }
 
 function updateQuantity(productId, change) {
@@ -605,12 +714,12 @@ function updateQuantity(productId, change) {
 
             renderCart();
             updateCartCount();
+            saveLocalData();
         }
     }
 }
 
 // Render Functions
-// In the renderProducts function, replace the product image section with:
 function renderProducts() {
     if (!productsContainer) return;
     
@@ -629,6 +738,10 @@ function renderProducts() {
             // Ensure colors is always an array
             const colorArray = Array.isArray(colors) ? colors : [colors];
             const displayColors = colorArray.filter(color => color && color.trim() !== '');
+            
+            // Calculate display prices
+            const hasDiscount = product.discount && product.discount > 0;
+            const displayPrice = hasDiscount ? (product.salePrice || calculateSalePrice(product.price, product.discount)) : product.price;
             
             return `
             <div class="product-card" id="${product.id}-card">
@@ -651,7 +764,8 @@ function renderProducts() {
                             </div>
                         ` : ''}
                     </div>
-                    ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
+                    ${hasDiscount ? `<div class="product-badge">${product.discount}% OFF</div>` : ''}
+                    ${product.badge && !hasDiscount ? `<div class="product-badge">${product.badge}</div>` : ''}
                     <div class="wishlist-btn" onclick="toggleWishlist(this, '${product.id}')">
                         <i class="${wishlist.includes(product.id) ? 'fas' : 'far'} fa-heart"></i>
                     </div>
@@ -659,8 +773,11 @@ function renderProducts() {
                 <div class="product-info">
                     <h3 class="product-title" onclick="toggleProductDetails('${product.id}')">${product.name}</h3>
                     <div class="product-price">
-                        <span class="current-price">₹ ${product.price.toFixed(2)}</span>
-                        ${product.oldPrice ? `<span class="old-price">₹ ${product.oldPrice.toFixed(2)}</span>` : ''}
+                        <span class="current-price">₹ ${displayPrice.toFixed(2)}</span>
+                        ${hasDiscount ? `
+                            <span class="old-price">₹ ${product.price.toFixed(2)}</span>
+                            <span class="discount">${product.discount}% OFF</span>
+                        ` : ''}
                     </div>
                     ${displayColors.length > 0 ? `
                     <div class="product-colors">
@@ -681,13 +798,14 @@ function renderProducts() {
                             ${displayColors.length > 0 ? `<li><span>Colors:</span> <span>${displayColors.join(', ')}</span></li>` : ''}
                             <li><span>Size:</span> <span>${product.size || '-'}</span></li>
                             <li><span>Material:</span> <span>${product.material || '-'}</span></li>
+                            ${hasDiscount ? `<li><span>Discount:</span> <span>${product.discount}% OFF</span></li>` : ''}
                         </ul>
                     </div>
                 </div>
             </div>
         `}).join('');
         
-        // Initialize sliders after rendering (manual only - no auto-slide)
+        // Initialize sliders after rendering
         products.forEach(product => {
             const images = product.images || [product.image];
             if (images.length > 1) {
@@ -700,7 +818,6 @@ function renderProducts() {
 }
 
 // Helper function to get color value for display
-// Improved color mapping function
 function getColorValue(colorName) {
     if (!colorName) return '#cccccc';
     
@@ -757,13 +874,15 @@ function renderWishlist() {
         const colors = product.colors || [product.color];
         const colorArray = Array.isArray(colors) ? colors : [colors];
         const displayColors = colorArray.filter(color => color && color.trim() !== '');
+        const hasDiscount = product.discount && product.discount > 0;
+        const displayPrice = hasDiscount ? (product.salePrice || calculateSalePrice(product.price, product.discount)) : product.price;
 
         return `
             <div class="product-card">
                 <div class="product-image">
                     <div class="image-slider" id="wishlist-slider-${product.id}">
                         <div class="slider-images">
-                            ${images.map(img => `
+                            ${images.map((img, index) => `
                                 <div class="slide">
                                     <img src="${img}" alt="${product.name}" loading="lazy">
                                 </div>
@@ -772,8 +891,14 @@ function renderWishlist() {
                         ${images.length > 1 ? `
                             <button class="slider-btn slider-prev">‹</button>
                             <button class="slider-btn slider-next">›</button>
+                            <div class="slider-dots">
+                                ${images.map((_, index) => `
+                                    <span class="slider-dot ${index === 0 ? 'active' : ''}"></span>
+                                `).join('')}
+                            </div>
                         ` : ''}
                     </div>
+                    ${hasDiscount ? `<div class="product-badge">${product.discount}% OFF</div>` : ''}
                     <div class="wishlist-btn" onclick="toggleWishlist(this, '${product.id}')">
                         <i class="fas fa-heart"></i>
                     </div>
@@ -781,7 +906,11 @@ function renderWishlist() {
                 <div class="product-info">
                     <h3 class="product-title">${product.name}</h3>
                     <div class="product-price">
-                        <span class="current-price">₹ ${product.price.toFixed(2)}</span>
+                        <span class="current-price">₹ ${displayPrice.toFixed(2)}</span>
+                        ${hasDiscount ? `
+                            <span class="old-price">₹ ${product.price.toFixed(2)}</span>
+                            <span class="discount">${product.discount}% OFF</span>
+                        ` : ''}
                     </div>
                     ${displayColors.length > 0 ? `
                     <div class="product-colors">
@@ -798,6 +927,183 @@ function renderWishlist() {
             </div>
         `;
     }).join('');
+
+    // Initialize sliders for wishlist items
+    setTimeout(() => {
+        wishlist.forEach(productId => {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                const images = product.images || [product.image];
+                if (images.length > 1) {
+                    initImageSlider(`wishlist-slider-${product.id}`, images);
+                }
+            }
+        });
+    }, 100);
+}
+
+// Update the initImageSlider function to work with any slider ID
+function initImageSlider(sliderId, images) {
+    const slider = document.getElementById(sliderId);
+    if (!slider) return;
+
+    let currentSlide = 0;
+    const totalSlides = images.length;
+
+    function showSlide(index) {
+        const slides = slider.querySelector('.slider-images');
+        const dots = slider.querySelectorAll('.slider-dot');
+        
+        if (slides) {
+            slides.style.transform = `translateX(-${index * 100}%)`;
+        }
+        
+        if (dots) {
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+        
+        currentSlide = index;
+    }
+
+    function nextSlide() {
+        const nextIndex = (currentSlide + 1) % totalSlides;
+        showSlide(nextIndex);
+    }
+
+    function prevSlide() {
+        const prevIndex = (currentSlide - 1 + totalSlides) % totalSlides;
+        showSlide(prevIndex);
+    }
+
+    // Add event listeners for next/prev buttons
+    const nextBtn = slider.querySelector('.slider-next');
+    const prevBtn = slider.querySelector('.slider-prev');
+    
+    if (nextBtn) {
+        nextBtn.onclick = (e) => {
+            e.stopPropagation();
+            nextSlide();
+        };
+    }
+    
+    if (prevBtn) {
+        prevBtn.onclick = (e) => {
+            e.stopPropagation();
+            prevSlide();
+        };
+    }
+
+    // Add event listeners for dots
+    const dots = slider.querySelectorAll('.slider-dot');
+    dots.forEach((dot, index) => {
+        dot.onclick = (e) => {
+            e.stopPropagation();
+            showSlide(index);
+        };
+    });
+
+    // Initialize first slide
+    showSlide(0);
+}
+
+// Also update the product card slider initialization to use the same function
+function renderProducts() {
+    if (!productsContainer) return;
+    
+    if (products.length === 0) {
+        productsContainer.innerHTML = `
+            <div style="text-align: center; padding: 40px; grid-column: 1 / -1;">
+                <i class="fas fa-box-open" style="font-size: 48px; color: var(--gray); margin-bottom: 20px;"></i>
+                <p style="color: var(--gray); font-size: 16px;">No products available at the moment.</p>
+            </div>
+        `;
+    } else {
+        productsContainer.innerHTML = products.map(product => {
+            const images = product.images || [product.image];
+            const colors = product.colors || [product.color];
+            
+            const colorArray = Array.isArray(colors) ? colors : [colors];
+            const displayColors = colorArray.filter(color => color && color.trim() !== '');
+            
+            const hasDiscount = product.discount && product.discount > 0;
+            const displayPrice = hasDiscount ? (product.salePrice || calculateSalePrice(product.price, product.discount)) : product.price;
+            
+            return `
+            <div class="product-card" id="${product.id}-card">
+                <div class="product-image" onclick="toggleProductDetails('${product.id}')">
+                    <div class="image-slider" id="image-slider-${product.id}">
+                        <div class="slider-images">
+                            ${images.map(img => `
+                                <div class="slide">
+                                    <img src="${img}" alt="${product.name}" loading="lazy">
+                                </div>
+                            `).join('')}
+                        </div>
+                        ${images.length > 1 ? `
+                            <button class="slider-btn slider-prev">‹</button>
+                            <button class="slider-btn slider-next">›</button>
+                            <div class="slider-dots">
+                                ${images.map((_, index) => `
+                                    <span class="slider-dot ${index === 0 ? 'active' : ''}" data-slide="${index}"></span>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                    ${hasDiscount ? `<div class="product-badge">${product.discount}% OFF</div>` : ''}
+                    ${product.badge && !hasDiscount ? `<div class="product-badge">${product.badge}</div>` : ''}
+                    <div class="wishlist-btn" onclick="toggleWishlist(this, '${product.id}')">
+                        <i class="${wishlist.includes(product.id) ? 'fas' : 'far'} fa-heart"></i>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title" onclick="toggleProductDetails('${product.id}')">${product.name}</h3>
+                    <div class="product-price">
+                        <span class="current-price">₹ ${displayPrice.toFixed(2)}</span>
+                        ${hasDiscount ? `
+                            <span class="old-price">₹ ${product.price.toFixed(2)}</span>
+                            <span class="discount">${product.discount}% OFF</span>
+                        ` : ''}
+                    </div>
+                    ${displayColors.length > 0 ? `
+                    <div class="product-colors">
+                        ${displayColors.slice(0, 5).map(color => `
+                            <span class="color-chip" style="background-color: ${getColorValue(color)}" title="${color}"></span>
+                        `).join('')}
+                        ${displayColors.length > 5 ? `<span class="color-more">+${displayColors.length - 5}</span>` : ''}
+                    </div>
+                    ` : ''}
+                    <div class="product-actions">
+                        <button class="add-to-cart" onclick="addToCart('${product.id}')">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-details">
+                    <div class="product-specs">
+                        <h4 class="specs-title">Product Details</h4>
+                        <ul class="specs-list">
+                            ${displayColors.length > 0 ? `<li><span>Colors:</span> <span>${displayColors.join(', ')}</span></li>` : ''}
+                            <li><span>Size:</span> <span>${product.size || '-'}</span></li>
+                            <li><span>Material:</span> <span>${product.material || '-'}</span></li>
+                            ${hasDiscount ? `<li><span>Discount:</span> <span>${product.discount}% OFF</span></li>` : ''}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        `}).join('');
+        
+        // Initialize sliders after rendering
+        setTimeout(() => {
+            products.forEach(product => {
+                const images = product.images || [product.image];
+                if (images.length > 1) {
+                    initImageSlider(`image-slider-${product.id}`, images);
+                }
+            });
+        }, 100);
+    }
+    
+    productsContainer.style.display = 'grid';
 }
 
 function renderCart() {
@@ -846,12 +1152,18 @@ function renderCart() {
 }
 
 function updateWishlistCount() {
-    document.querySelector('.wishlist-count').textContent = wishlist.length;
+    const wishlistCount = document.querySelector('.wishlist-count');
+    if (wishlistCount) {
+        wishlistCount.textContent = wishlist.length;
+    }
 }
 
 function updateCartCount() {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    document.querySelector('.cart-count').textContent = totalItems;
+    const cartCount = document.querySelector('.cart-count');
+    if (cartCount) {
+        cartCount.textContent = totalItems;
+    }
 }
 
 function updateWishlistIcons() {
@@ -883,8 +1195,10 @@ function updateAdminProducts() {
             <td>${product.id}</td>
             <td>${product.name}</td>
             <td>₹ ${product.price.toFixed(2)}</td>
+            <td>${product.discount || 0}%</td>
+            <td>₹ ${(product.salePrice || product.price).toFixed(2)}</td>
             <td>${product.stock || 0}</td>
-            <td>${colors.join(', ')}</td>
+            <td>${Array.isArray(colors) ? colors.join(', ') : colors}</td>
             <td>${product.size || '-'}</td>
             <td>${product.material || '-'}</td>
             <td>${images.length} images</td>
@@ -982,17 +1296,21 @@ function editProduct(productId) {
     // Populate the form with product data
     document.getElementById('product-name').value = product.name;
     document.getElementById('product-price').value = product.price;
+    document.getElementById('product-discount').value = product.discount || 0;
+    document.getElementById('product-sale-price').value = product.salePrice || product.price;
     document.getElementById('product-stock').value = product.stock || 0;
     document.getElementById('product-size').value = product.size || '';
     document.getElementById('product-material').value = product.material || '';
     
-    // Handle colors
+    // Handle colors - ensure it's always an array
     const colors = product.colors || [product.color];
-    document.getElementById('product-colors').value = colors.join(', ');
+    const colorsArray = Array.isArray(colors) ? colors : [colors];
+    document.getElementById('product-colors').value = colorsArray.filter(color => color && color.trim() !== '').join(', ');
     
-    // Handle images
+    // Handle images - ensure it's always an array
     const images = product.images || [product.image];
-    document.getElementById('product-images').value = images.join('\n');
+    const imagesArray = Array.isArray(images) ? images : [images];
+    document.getElementById('product-images').value = imagesArray.filter(img => img && img.trim() !== '').join('\n');
 
     // Switch to the add product tab
     switchAdminTab('add-product');
@@ -1054,21 +1372,33 @@ function viewOrder(orderId) {
     const order = orders.find(o => o.id === orderId);
     if (!order) return;
 
-    let orderDetails = `Order Details:
-ID: ${order.id}
-Customer: ${order.customerName}
-Email: ${order.customerEmail}
-Phone: ${order.customerPhone}
-Address: ${order.customerAddress}
-Date: ${order.createdAt?.toDate().toLocaleDateString()}
-Total: ₹ ${order.total?.toFixed(2)}
-Status: ${order.status}
+    let orderDetails = `Order Details:\n\n`;
+    orderDetails += `Order ID: ${order.id}\n`;
+    orderDetails += `Customer: ${order.customerName}\n`;
+    orderDetails += `Email: ${order.customerEmail}\n`;
+    orderDetails += `Phone: ${order.customerPhone}\n`;
+    orderDetails += `Address: ${order.customerAddress}\n`;
+    orderDetails += `Date: ${order.createdAt?.toDate().toLocaleDateString()}\n`;
+    orderDetails += `Total: ₹ ${order.total?.toFixed(2)}\n`;
+    orderDetails += `Status: ${order.status}\n\n`;
+    orderDetails += `Items:\n`;
 
-Items:`;
-
-    order.items.forEach(item => {
-        orderDetails += `\n- ${item.name} (Qty: ${item.quantity}, Price: ₹ ${item.price.toFixed(2)})`;
+    order.items?.forEach((item, index) => {
+        orderDetails += `${index + 1}. ${item.name}\n`;
+        orderDetails += `   Quantity: ${item.quantity}\n`;
+        orderDetails += `   Price: ₹ ${item.price.toFixed(2)}\n`;
+        if (item.size) {
+            orderDetails += `   Size: ${item.size}\n`;
+        }
+        if (item.color) {
+            orderDetails += `   Color: ${item.color}\n`;
+        }
+        orderDetails += `   Subtotal: ₹ ${(item.quantity * item.price).toFixed(2)}\n\n`;
     });
+
+    orderDetails += `Order Summary:\n`;
+    orderDetails += `Subtotal: ₹ ${order.subtotal?.toFixed(2) || '0.00'}\n`;
+    orderDetails += `Total: ₹ ${order.total?.toFixed(2) || '0.00'}\n`;
 
     alert(orderDetails);
 }
@@ -1189,26 +1519,33 @@ function handleProductSubmit(e) {
 
     const name = document.getElementById('product-name').value;
     const price = parseFloat(document.getElementById('product-price').value);
+    const discount = parseFloat(document.getElementById('product-discount').value) || 0;
     const stock = parseInt(document.getElementById('product-stock').value);
     const size = document.getElementById('product-size').value;
     const material = document.getElementById('product-material').value;
     
-    // Handle multiple colors
+    // Handle multiple colors - split by comma and clean up
     const colorsInput = document.getElementById('product-colors').value;
-    const colors = colorsInput.split(',').map(color => color.trim()).filter(color => color);
+    const colors = colorsInput.split(',')
+        .map(color => color.trim())
+        .filter(color => color && color !== '');
     
-    // Handle multiple images
+    // Handle multiple images - split by newline and clean up
     const imagesInput = document.getElementById('product-images').value;
-    const images = imagesInput.split('\n').map(img => img.trim()).filter(img => img);
+    const images = imagesInput.split('\n')
+        .map(img => img.trim())
+        .filter(img => img && img !== '');
 
     const productData = {
         name,
         price,
+        discount,
+        salePrice: calculateSalePrice(price, discount),
         stock,
         size,
         material,
-        colors,
-        images,
+        colors: colors.length > 0 ? colors : ['Default'],
+        images: images.length > 0 ? images : ['https://via.placeholder.com/500x600?text=No+Image'],
         createdAt: new Date()
     };
 
@@ -1241,6 +1578,7 @@ function handleProductSubmit(e) {
     }
 }
 
+
 function handleNewsletter(e) {
     e.preventDefault();
     const email = this.querySelector('input').value;
@@ -1260,43 +1598,47 @@ function handleNewsletter(e) {
 }
 
 // Checkout Functions
-function showCheckoutForm() {
+function placeOrder() {
     if (!currentUser) {
         openAuthModal();
         return;
     }
 
-    document.getElementById('checkout-form').style.display = 'block';
-    document.querySelector('.checkout-btn').textContent = 'Place Order';
-    document.querySelector('.checkout-btn').onclick = placeOrder;
-}
+    // Get current user data for shipping info
+    db.collection('users').doc(currentUser.uid).get()
+        .then(doc => {
+            if (!doc.exists) {
+                throw new Error('User data not found');
+            }
 
-function placeOrder() {
-    const phone = document.getElementById('checkout-phone').value;
-    const address = document.getElementById('checkout-address').value;
+            const userData = doc.data();
+            
+            // Validate shipping information
+            if (!userData.phone || !userData.address) {
+                alert('Please complete your shipping information before placing an order');
+                document.getElementById('edit-shipping-form').style.display = 'block';
+                document.getElementById('shipping-info').style.display = 'none';
+                return;
+            }
 
-    if (!phone || !address) {
-        alert('Please fill in all required fields');
-        return;
-    }
+            const orderData = {
+                customerId: currentUser.uid,
+                customerName: currentUser.displayName || currentUser.email,
+                customerEmail: currentUser.email,
+                customerPhone: userData.phone,
+                customerAddress: userData.address,
+                items: cart,
+                subtotal: cart.reduce((sum, item) => sum + (item.quantity * item.price), 0),
+                total: cart.reduce((sum, item) => sum + (item.quantity * item.price), 0),
+                status: 'pending',
+                createdAt: new Date()
+            };
 
-    const orderData = {
-        customerId: currentUser.uid,
-        customerName: currentUser.displayName || currentUser.email,
-        customerEmail: currentUser.email,
-        customerPhone: phone,
-        customerAddress: address,
-        items: cart,
-        subtotal: cart.reduce((sum, item) => sum + (item.quantity * item.price), 0),
-        total: cart.reduce((sum, item) => sum + (item.quantity * item.price), 0),
-        status: 'pending',
-        createdAt: new Date()
-    };
+            console.log('Placing order with data:', orderData);
 
-    console.log('Placing order with data:', orderData);
-
-    // Save order to Firestore
-    db.collection('orders').add(orderData)
+            // Save order to Firestore
+            return db.collection('orders').add(orderData);
+        })
         .then((docRef) => {
             console.log('Order placed successfully with ID:', docRef.id);
             
@@ -1311,23 +1653,23 @@ function placeOrder() {
             // Clear local cart
             cart = [];
             updateCartCount();
-
-            // Reset checkout form
-            document.getElementById('checkout-form').style.display = 'none';
-            document.querySelector('.checkout-btn').textContent = 'Proceed to Checkout';
-            document.querySelector('.checkout-btn').onclick = showCheckoutForm;
+            saveLocalData();
 
             showNotification('Order placed successfully!');
             renderCart();
             
             // Reload orders to show the new order
             loadOrders();
+            
+            // Go to orders page
+            showOrdersPage();
         })
         .catch(error => {
             console.error("Error placing order: ", error);
-            console.error("Error details:", error.message, error.code);
             
-            if (error.code === 'permission-denied') {
+            if (error.message === 'User data not found') {
+                showNotification('Please complete your profile information');
+            } else if (error.code === 'permission-denied') {
                 showNotification('Permission denied. Please check Firestore security rules.');
             } else {
                 showNotification('Error placing order: ' + error.message);
@@ -1384,9 +1726,6 @@ function hideSkeletonLoading() {
         productsContainer.style.display = 'grid';
     }
 }
-
-// Initialize the application
-initApp();
 
 // Hamburger Menu Functions
 function toggleMobileMenu() {
@@ -1601,202 +1940,9 @@ function reorder(orderId) {
     });
 
     updateCartCount();
+    saveLocalData();
     showNotification('Items added to cart!');
     showCartPage();
-}
-
-// Update the initApp function to include mobile menu setup
-function initApp() {
-    // Initialize products container display
-    const productsContainer = document.getElementById('products-container');
-    if (productsContainer) {
-        productsContainer.style.display = 'none';
-    }
-
-    // Setup hamburger menu
-    const hamburger = document.getElementById('hamburger');
-    if (hamburger) {
-        hamburger.addEventListener('click', toggleMobileMenu);
-    }
-
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', (e) => {
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('nav-links');
-        
-        if (navLinks.classList.contains('active') && 
-            !hamburger.contains(e.target) && 
-            !navLinks.contains(e.target)) {
-            closeMobileMenu();
-        }
-    });
-
-    // Check if user is logged in
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            currentUser = user;
-            updateUserUI(user);
-            loadUserData();
-            checkAdminStatus(user.uid);
-        } else {
-            currentUser = null;
-            isAdmin = false;
-            adminLink.style.display = 'none';
-            // Hide mobile admin link too
-            const adminLinkMobile = document.getElementById('admin-link-mobile');
-            if (adminLinkMobile) {
-                adminLinkMobile.style.display = 'none';
-            }
-            userInfo.style.display = 'none';
-            authText.textContent = 'Account';
-            loadLocalData();
-        }
-        
-        // Load products regardless of login status
-        loadProducts();
-        
-        // Only load orders and users if logged in
-        if (user) {
-            loadOrders();
-            loadUsers();
-        }
-    });
-
-    // Setup event listeners
-    setupEventListeners();
-}
-
-// Update the checkAdminStatus function to handle mobile admin link
-function checkAdminStatus(uid) {
-    db.collection('admins').doc(uid).get()
-        .then(doc => {
-            if (doc.exists) {
-                isAdmin = true;
-                adminLink.style.display = 'flex';
-                // Show mobile admin link too
-                const adminLinkMobile = document.getElementById('admin-link-mobile');
-                if (adminLinkMobile) {
-                    adminLinkMobile.style.display = 'block';
-                }
-                // Load admin-specific data
-                loadAdminData();
-            } else {
-                isAdmin = false;
-                adminLink.style.display = 'none';
-                // Hide mobile admin link too
-                const adminLinkMobile = document.getElementById('admin-link-mobile');
-                if (adminLinkMobile) {
-                    adminLinkMobile.style.display = 'none';
-                }
-            }
-        })
-        .catch(error => {
-            console.error("Error checking admin status: ", error);
-            isAdmin = false;
-            adminLink.style.display = 'none';
-            // Hide mobile admin link too
-            const adminLinkMobile = document.getElementById('admin-link-mobile');
-            if (adminLinkMobile) {
-                adminLinkMobile.style.display = 'none';
-            }
-        });
-}
-
-// Update page navigation functions to close mobile menu
-function showHomePage() {
-    mainContent.style.display = 'block';
-    wishlistPage.style.display = 'none';
-    cartPage.style.display = 'none';
-    adminPanel.style.display = 'none';
-    ordersPage.style.display = 'none';
-    closeMobileMenu();
-}
-
-function showWishlistPage() {
-    if (!currentUser) {
-        openAuthModal();
-        return;
-    }
-
-    mainContent.style.display = 'none';
-    wishlistPage.style.display = 'block';
-    cartPage.style.display = 'none';
-    adminPanel.style.display = 'none';
-    ordersPage.style.display = 'none';
-    renderWishlist();
-    closeMobileMenu();
-}
-
-function showCartPage() {
-    if (!currentUser) {
-        openAuthModal();
-        return;
-    }
-
-    mainContent.style.display = 'none';
-    wishlistPage.style.display = 'none';
-    cartPage.style.display = 'block';
-    adminPanel.style.display = 'none';
-    ordersPage.style.display = 'none';
-    renderCart();
-    closeMobileMenu();
-}
-
-function showAdminPanel() {
-    if (!isAdmin) {
-        openAuthModal();
-        switchAuthTab('admin');
-        return;
-    }
-    mainContent.style.display = 'none';
-    wishlistPage.style.display = 'none';
-    cartPage.style.display = 'none';
-    adminPanel.style.display = 'block';
-    ordersPage.style.display = 'none';
-    updateAdminStats();
-    closeMobileMenu();
-}
-
-// Add DOM element for orders page at the top of your script
-const ordersPage = document.getElementById('orders-page');
-
-// Update the setupEventListeners function
-function setupEventListeners() {
-    // Auth forms
-    document.getElementById('login-form').addEventListener('submit', handleLogin);
-    document.getElementById('register-form').addEventListener('submit', handleRegister);
-    document.getElementById('admin-form').addEventListener('submit', handleAdminLogin);
-
-    // Account button (login/logout)
-    document.querySelector('.action-item').addEventListener('click', handleAccountClick);
-
-    // Product form
-    addProductForm.addEventListener('submit', handleProductSubmit);
-
-    // Newsletter
-    document.querySelector('.newsletter-form').addEventListener('submit', handleNewsletter);
-
-    // Close modal when clicking outside
-    window.addEventListener('click', function (e) {
-        if (e.target === authModal) {
-            closeAuthModal();
-        }
-    });
-
-    // Scroll to products
-    document.getElementById("scrollBtn").addEventListener("click", function () {
-        document.getElementById("products-section").scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-    });
-
-    // Close mobile menu on window resize
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
-            closeMobileMenu();
-        }
-    });
 }
 
 // Shipping Information Functions
@@ -1890,7 +2036,275 @@ function saveShippingInfo() {
     });
 }
 
-// Updated placeOrder function (simplified)
+// Add DOM element for orders page
+const ordersPage = document.getElementById('orders-page');
+
+// Initialize the application
+initApp();
+
+// Add to the State Management section
+let productSelections = {};
+
+// Add this function to handle size and color selection
+function updateProductSelection(productId, size, color) {
+    if (!productSelections[productId]) {
+        productSelections[productId] = {};
+    }
+    productSelections[productId] = { size, color };
+}
+
+// Modify the addToCart function to include size and color selection
+function addToCart(productId) {
+    if (!currentUser) {
+        openAuthModal();
+        return;
+    }
+
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    // Check if product requires size/color selection
+    const hasSizes = product.size && product.size.split(',').length > 0;
+    const hasColors = product.colors && product.colors.length > 0;
+
+    if (hasSizes || hasColors) {
+        showProductSelectionModal(product);
+        return;
+    }
+
+    // If no size/color selection needed, add directly to cart
+    addToCartWithSelection(productId, null, null);
+}
+
+// New function to show product selection modal
+function showProductSelectionModal(product) {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.display = 'flex';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <span class="close-modal" onclick="this.parentElement.parentElement.remove()">&times;</span>
+            <h3>Select Options for ${product.name}</h3>
+            
+            ${product.size ? `
+            <div class="form-group">
+                <label>Size</label>
+                <div class="size-options">
+                    ${product.size.split(',').map(s => s.trim()).map(size => `
+                        <button class="size-option" onclick="selectSize(this, '${size}')">${size}</button>
+                    `).join('')}
+                </div>
+            </div>
+            ` : ''}
+            
+            ${product.colors && product.colors.length > 0 ? `
+            <div class="form-group">
+                <label>Color</label>
+                <div class="color-options">
+                    ${product.colors.map(color => `
+                        <div class="color-option" onclick="selectColor(this, '${color}')" 
+                             style="background-color: ${getColorValue(color)}" 
+                             title="${color}">
+                            <span class="color-name">${color}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            ` : ''}
+            
+            <div class="selection-actions">
+                <button class="btn btn-outline" onclick="this.parentElement.parentElement.parentElement.remove()">Cancel</button>
+                <button class="btn" onclick="addSelectedToCart('${product.id}')">Add to Cart</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+// Function to handle size selection
+function selectSize(button, size) {
+    const buttons = button.parentElement.querySelectorAll('.size-option');
+    buttons.forEach(btn => btn.classList.remove('selected'));
+    button.classList.add('selected');
+    button.dataset.selectedSize = size;
+}
+
+// Function to handle color selection
+function selectColor(button, color) {
+    const buttons = button.parentElement.querySelectorAll('.color-option');
+    buttons.forEach(btn => btn.classList.remove('selected'));
+    button.classList.add('selected');
+    button.dataset.selectedColor = color;
+}
+
+// Function to add product to cart with selections
+function addSelectedToCart(productId) {
+    const modal = document.querySelector('.modal:last-child');
+    const selectedSize = modal.querySelector('.size-option.selected')?.dataset.selectedSize || null;
+    const selectedColor = modal.querySelector('.color-option.selected')?.dataset.selectedColor || null;
+    
+    // Validate selection if required
+    const product = products.find(p => p.id === productId);
+    if (product.size && !selectedSize) {
+        alert('Please select a size');
+        return;
+    }
+    if (product.colors && product.colors.length > 0 && !selectedColor) {
+        alert('Please select a color');
+        return;
+    }
+    
+    modal.remove();
+    addToCartWithSelection(productId, selectedSize, selectedColor);
+}
+
+// Modified function to add to cart with size and color
+function addToCartWithSelection(productId, size, color) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    // Use sale price if available, otherwise use regular price
+    const price = product.salePrice || product.price;
+
+    // Create a unique key for cart items with same product but different size/color
+    const cartItemKey = `${productId}-${size || 'nosize'}-${color || 'nocolor'}`;
+    
+    const existingItem = cart.find(item => item.cartKey === cartItemKey);
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+
+        if (currentUser) {
+            db.collection('users').doc(currentUser.uid).collection('cart').doc(existingItem.id).update({
+                quantity: existingItem.quantity
+            })
+            .catch(error => {
+                console.error("Error updating cart: ", error);
+            });
+        }
+    } else {
+        const cartItem = {
+            id: productId,
+            cartKey: cartItemKey,
+            name: product.name,
+            price: price,
+            image: product.images ? product.images[0] : product.image,
+            quantity: 1,
+            size: size,
+            color: color
+        };
+
+        cart.push(cartItem);
+
+        if (currentUser) {
+            db.collection('users').doc(currentUser.uid).collection('cart').doc(cartItemKey).set({
+                ...cartItem,
+                addedAt: new Date()
+            })
+            .catch(error => {
+                console.error("Error adding to cart: ", error);
+            });
+        }
+    }
+
+    updateCartCount();
+    saveLocalData();
+    showNotification('Product added to cart!');
+}
+
+// Modify the renderCart function to show size and color
+function renderCart() {
+    const emptyCart = document.getElementById('empty-cart');
+    const cartSubtotal = document.getElementById('cart-subtotal');
+    const cartTotal = document.getElementById('cart-total');
+    const selectionItems = document.getElementById('selection-items');
+
+    if (cart.length === 0) {
+        emptyCart.style.display = 'block';
+        cartItemsContainer.innerHTML = '';
+        cartSubtotal.textContent = '₹ 0.00';
+        cartTotal.textContent = '₹ 0.00';
+        if (selectionItems) selectionItems.innerHTML = '';
+        return;
+    }
+
+    emptyCart.style.display = 'none';
+    cartItemsContainer.innerHTML = cart.map(item => {
+        const product = products.find(p => p.id === item.id);
+        if (!product) return '';
+
+        const subtotal = item.quantity * item.price;
+        return `
+            <div class="cart-item">
+                <div class="cart-item-image">
+                    <img src="${item.image}" alt="${product.name}">
+                </div>
+                <div class="cart-item-details">
+                    <h3 class="cart-item-title">${product.name}</h3>
+                    ${item.size ? `<div class="cart-item-size">Size: ${item.size}</div>` : ''}
+                    ${item.color ? `<div class="cart-item-color">Color: ${item.color}</div>` : ''}
+                    <div class="cart-item-price">₹ ${item.price.toFixed(2)}</div>
+                    <div class="cart-item-actions">
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="updateQuantity('${item.cartKey}', -1)">-</button>
+                            <input type="text" class="quantity-input" value="${item.quantity}" readonly>
+                            <button class="quantity-btn" onclick="updateQuantity('${item.cartKey}', 1)">+</button>
+                        </div>
+                        <button class="remove-from-cart" onclick="removeFromCart('${item.cartKey}')">Remove</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    cartSubtotal.textContent = `₹ ${total.toFixed(2)}`;
+    cartTotal.textContent = `₹ ${total.toFixed(2)}`;
+}
+
+// Modify the updateQuantity function to use cartKey
+function updateQuantity(cartKey, change) {
+    const item = cart.find(item => item.cartKey === cartKey);
+    if (item) {
+        item.quantity += change;
+
+        if (item.quantity <= 0) {
+            removeFromCart(cartKey);
+        } else {
+            if (currentUser) {
+                db.collection('users').doc(currentUser.uid).collection('cart').doc(cartKey).update({
+                    quantity: item.quantity
+                })
+                .catch(error => {
+                    console.error("Error updating quantity: ", error);
+                });
+            }
+
+            renderCart();
+            updateCartCount();
+            saveLocalData();
+        }
+    }
+}
+
+// Modify the removeFromCart function to use cartKey
+function removeFromCart(cartKey) {
+    cart = cart.filter(item => item.cartKey !== cartKey);
+
+    if (currentUser) {
+        db.collection('users').doc(currentUser.uid).collection('cart').doc(cartKey).delete()
+            .catch(error => {
+                console.error("Error removing from cart: ", error);
+            });
+    }
+
+    renderCart();
+    updateCartCount();
+    saveLocalData();
+}
+
+// Modify the placeOrder function to include size and color in order data
 function placeOrder() {
     if (!currentUser) {
         openAuthModal();
@@ -1920,7 +2334,12 @@ function placeOrder() {
                 customerEmail: currentUser.email,
                 customerPhone: userData.phone,
                 customerAddress: userData.address,
-                items: cart,
+                items: cart.map(item => ({
+                    ...item,
+                    // Include size and color in order items
+                    size: item.size || null,
+                    color: item.color || null
+                })),
                 subtotal: cart.reduce((sum, item) => sum + (item.quantity * item.price), 0),
                 total: cart.reduce((sum, item) => sum + (item.quantity * item.price), 0),
                 status: 'pending',
@@ -1937,7 +2356,7 @@ function placeOrder() {
             
             // Clear cart after successful order
             const deletePromises = cart.map(item => {
-                return db.collection('users').doc(currentUser.uid).collection('cart').doc(item.id).delete();
+                return db.collection('users').doc(currentUser.uid).collection('cart').doc(item.cartKey).delete();
             });
 
             return Promise.all(deletePromises);
@@ -1945,7 +2364,9 @@ function placeOrder() {
         .then(() => {
             // Clear local cart
             cart = [];
+            productSelections = {};
             updateCartCount();
+            saveLocalData();
 
             showNotification('Order placed successfully!');
             renderCart();
@@ -1969,57 +2390,3 @@ function placeOrder() {
         });
 }
 
-// Remove the old showCheckoutForm function since we don't need it anymore
-// function showCheckoutForm() { ... }
-
-// Update showCartPage to load shipping info
-function showCartPage() {
-    if (!currentUser) {
-        openAuthModal();
-        return;
-    }
-
-    mainContent.style.display = 'none';
-    wishlistPage.style.display = 'none';
-    cartPage.style.display = 'block';
-    adminPanel.style.display = 'none';
-    ordersPage.style.display = 'none';
-    renderCart();
-    loadShippingInfo(); // Load shipping info when cart page is shown
-    closeMobileMenu();
-}
-
-// Update the loadUserData function to also load shipping info
-function loadUserData() {
-    if (!currentUser) return;
-
-    // Load wishlist
-    db.collection('users').doc(currentUser.uid).collection('wishlist').get()
-        .then(snapshot => {
-            wishlist = [];
-            snapshot.forEach(doc => {
-                wishlist.push(doc.id);
-            });
-            updateWishlistCount();
-            updateWishlistIcons();
-        })
-        .catch(error => {
-            console.error("Error loading wishlist: ", error);
-        });
-
-    // Load cart
-    db.collection('users').doc(currentUser.uid).collection('cart').get()
-        .then(snapshot => {
-            cart = [];
-            snapshot.forEach(doc => {
-                cart.push({ id: doc.id, ...doc.data() });
-            });
-            updateCartCount();
-        })
-        .catch(error => {
-            console.error("Error loading cart: ", error);
-        });
-
-    // Load shipping info
-    loadShippingInfo();
-}
