@@ -63,16 +63,9 @@
         </div>
 
         <ul class="nav-links" id="nav-links">
-            <!-- <li><a href="#" onclick="showHomePage(); closeMobileMenu()">New Arrivals</a></li> -->
-            <!-- <li><a href="#" onclick="showHomePage(); closeMobileMenu()">Men</a></li> -->
-            <!-- <li><a href="#" onclick="showHomePage(); closeMobileMenu()">Women</a></li> -->
-            <!-- <li><a href="#" onclick="showHomePage(); closeMobileMenu()">Accessories</a></li> -->
-            <!-- <li><a href="#" onclick="showHomePage(); closeMobileMenu()">Collections</a></li> -->
-            <!-- <li><a href="#" onclick="showHomePage(); closeMobileMenu()">Sale</a></li> -->
-            <!-- Mobile only menu items -->
-            <!-- <li class="mobile-only"><a href="#" onclick="showOrdersPage(); closeMobileMenu()">My Orders</a></li> -->
-            <!-- <li class="mobile-only"><a href="#" onclick="showWishlistPage(); closeMobileMenu()">Wishlist</a></li> -->
-            <!-- <li class="mobile-only"><a href="#" onclick="showCartPage(); closeMobileMenu()">Cart</a></li> -->
+            <li class="mobile-only"><a href="#" onclick="showOrdersPage(); closeMobileMenu()">My Orders</a></li>
+            <li class="mobile-only"><a href="#" onclick="showWishlistPage(); closeMobileMenu()">Wishlist</a></li>
+            <li class="mobile-only"><a href="#" onclick="showCartPage(); closeMobileMenu()">Cart</a></li>
             <li class="mobile-only" id="admin-link-mobile" style="display: none;"><a href="#" onclick="showAdminPanel(); closeMobileMenu()">Admin</a></li>
         </ul>
     </header>
@@ -84,13 +77,12 @@
             <div class="container hero-content">
                 <h1>Elevate Your Style with KISWAH</h1>
                 <p>Discover our latest collection of premium clothing designed for the modern individual who values
-                    quality
-                    and style.</p>
+                    quality and style.</p>
                 <a href="#" class="btn" id="scrollBtn">Shop Now</a>
             </div>
         </section>
 
-        <!-- In the Featured Products section -->
+        <!-- Featured Products section -->
         <section class="container" id="products-section">
             <h2 class="section-title">Featured Products</h2>
             
@@ -101,79 +93,7 @@
             
             <!-- Skeleton Loading -->
             <div class="skeleton-loading" id="skeleton-loading">
-                <!-- Repeat this 8 times for a full grid -->
-                <div class="skeleton-card">
-                    <div class="skeleton-image"></div>
-                    <div class="skeleton-content">
-                        <div class="skeleton-line short"></div>
-                        <div class="skeleton-line medium"></div>
-                        <div class="skeleton-line long"></div>
-                        <div class="skeleton-button"></div>
-                    </div>
-                </div>
-                <div class="skeleton-card">
-                    <div class="skeleton-image"></div>
-                    <div class="skeleton-content">
-                        <div class="skeleton-line short"></div>
-                        <div class="skeleton-line medium"></div>
-                        <div class="skeleton-line long"></div>
-                        <div class="skeleton-button"></div>
-                    </div>
-                </div>
-                <div class="skeleton-card">
-                    <div class="skeleton-image"></div>
-                    <div class="skeleton-content">
-                        <div class="skeleton-line short"></div>
-                        <div class="skeleton-line medium"></div>
-                        <div class="skeleton-line long"></div>
-                        <div class="skeleton-button"></div>
-                    </div>
-                </div>
-                <div class="skeleton-card">
-                    <div class="skeleton-image"></div>
-                    <div class="skeleton-content">
-                        <div class="skeleton-line short"></div>
-                        <div class="skeleton-line medium"></div>
-                        <div class="skeleton-line long"></div>
-                        <div class="skeleton-button"></div>
-                    </div>
-                </div>
-                <div class="skeleton-card">
-                    <div class="skeleton-image"></div>
-                    <div class="skeleton-content">
-                        <div class="skeleton-line short"></div>
-                        <div class="skeleton-line medium"></div>
-                        <div class="skeleton-line long"></div>
-                        <div class="skeleton-button"></div>
-                    </div>
-                </div>
-                <div class="skeleton-card">
-                    <div class="skeleton-image"></div>
-                    <div class="skeleton-content">
-                        <div class="skeleton-line short"></div>
-                        <div class="skeleton-line medium"></div>
-                        <div class="skeleton-line long"></div>
-                        <div class="skeleton-button"></div>
-                    </div>
-                </div>
-                <div class="skeleton-card">
-                    <div class="skeleton-image"></div>
-                    <div class="skeleton-content">
-                        <div class="skeleton-line short"></div>
-                        <div class="skeleton-line medium"></div>
-                        <div class="skeleton-line long"></div>
-                        <div class="skeleton-button"></div>
-                    </div>
-                </div>
-                <div class="skeleton-card">
-                    <div class="skeleton-image"></div>
-                    <div class="skeleton-content">
-                        <div class="skeleton-line short"></div>
-                        <div class="skeleton-line medium"></div>
-                        <div class="skeleton-line long"></div>
-                        <div class="skeleton-button"></div>
-                    </div>
-                </div>
+                <!-- Skeleton cards will be generated by JavaScript -->
             </div>
         </section>
 
@@ -245,14 +165,12 @@
     </section>
 
     <!-- Cart Page -->
-        <!-- Cart Page -->
     <section id="cart-page" class="cart-page container">
         <h2 class="section-title">Shopping Cart</h2>
         <div class="cart-items" id="cart-items-container">
             <!-- Cart items will be dynamically added here -->
         </div>
-        
-        <!-- Shipping Information Display -->
+
         <div class="shipping-info" id="shipping-info">
             <h3>Shipping Information</h3>
             <div class="shipping-details">
@@ -324,65 +242,72 @@
 
         <div id="admin-products" class="admin-content active">
             <h3>Product Management</h3>
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Product ID</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Stock</th>
-                        <th>Color</th>
-                        <th>Size</th>
-                        <th>Material</th>
-                        <th>Images</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody id="admin-products-list">
-                    <!-- Products will be dynamically loaded here -->
-                </tbody>
-            </table>
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Discount</th>
+                            <th>Sale Price</th>
+                            <th>Stock</th>
+                            <th>Colors</th>
+                            <th>Size</th>
+                            <th>Material</th>
+                            <th>Images</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-products-list">
+                        <!-- Products will be dynamically loaded here -->
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div id="admin-orders" class="admin-content">
             <h3>Order Management</h3>
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Order ID</th>
-                        <th>Customer</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="admin-orders-list">
-                    <!-- Orders will be dynamically loaded here -->
-                </tbody>
-            </table>
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-orders-list">
+                        <!-- Orders will be dynamically loaded here -->
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div id="admin-users" class="admin-content">
             <h3>User Management</h3>
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>User ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Joined</th>
-                        <th>Orders</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="admin-users-list">
-                    <!-- Users will be dynamically loaded here -->
-                </tbody>
-            </table>
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Joined</th>
+                            <th>Orders</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-users-list">
+                        <!-- Users will be dynamically loaded here -->
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div id="admin-add-product" class="admin-content">
@@ -396,6 +321,16 @@
                     <div class="form-group">
                         <label for="product-price">Price (₹ )</label>
                         <input type="number" id="product-price" step="0.01" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="product-discount">Discount (%)</label>
+                        <input type="number" id="product-discount" step="1" min="0" max="100" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="product-sale-price">Sale Price (₹ )</label>
+                        <input type="number" id="product-sale-price" step="0.01" readonly>
                     </div>
                 </div>
                 <div class="form-row">
@@ -425,7 +360,6 @@
                 <button type="submit" class="form-submit">Add Product</button>
             </form>
         </div>
-
     </section>
 
     <!-- Footer -->
@@ -455,7 +389,7 @@
                 <div class="footer-column">
                     <h3>Company</h3>
                     <ul class="footer-links">
-                             <li><a href="about-us.html">About Us</a></li>
+                        <li><a href="about-us.html">About Us</a></li>
                         <li><a href="contact-us.html">Contact Us</a></li>
                     </ul>
                 </div>
@@ -496,8 +430,7 @@
                 </div>
                 <button type="submit" class="form-submit">Login</button>
             </form>
-            <!--  -->
-            <!-- In the registration form section -->
+
             <form id="register-form" class="auth-form">
                 <div class="form-group">
                     <label for="register-name">Full Name</label>
@@ -525,7 +458,7 @@
                 </div>
                 <button type="submit" class="form-submit">Register</button>
             </form>
-            <!--  -->
+
             <form id="admin-form" class="auth-form hid">
                 <div class="form-group">
                     <label for="admin-email">Admin Email</label>
@@ -542,5 +475,4 @@
 
     <script src="script.js"></script>
 </body>
-
 </html>
