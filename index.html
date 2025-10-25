@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KISWAH - Premium Clothing Brand</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #8a7f6f;
+            --accent: #a67c52;
+            --light: #f5f3ef;
+            --dark: #2b2b2b;
+            --gray: #7d879c;
+            --border: #e5e5e5;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --info: #3498db;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--primary);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgb(34, 35, 42);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 35px;
+            font-weight: 700;
+            color: rgb(198, 178, 65);
+            text-decoration: none;
+            letter-spacing: 5px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            color: var(--light);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .action-item i {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .cart-count, .wishlist-count {
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+            justify-content: center;
+            padding: 12px 0;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-links li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links li a:hover {
+            color: var(--accent);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 1000;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* Categories Dropdown */
+        .categories-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .categories-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+
+        .categories-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .categories-content a {
+            color: var(--dark);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+        }
+
+        .categories-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .categories-dropdown:hover .categories-content {
+            display: block;
+        }
+
+        /* Category Display */
+        .category-display {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .category-display h3 {
+            color: var(--primary);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+        }
+
+        .category-display .current-category {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        /* Products Section */
+        .section-title {
+            text-align: center;
+            margin: 50px 0 30px;
+            position: relative;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--primary);
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background-color: var(--accent);
+            margin: 15px auto;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            position: relative;
+            height: auto;
+            max-height: 475px;
+        }
+
+        .product-card.expanded {
+            max-height: 800px;
+            z-index: 10;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            height: 280px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .wishlist-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 2;
+        }
+
+        .wishlist-btn:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .product-info {
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .product-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .add-to-cart {
+            flex: 1;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background-color: var(--secondary);
+        }
+
+        /* Product Details Section */
+        .product-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            padding: 0 15px;
+        }
+
+        .product-card.expanded .product-details {
+            max-height: 500px;
+            padding: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .product-specs {
+            margin-bottom: 15px;
+        }
+
+        .specs-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        .specs-list {
+            list-style: none;
+        }
+
+        .specs-list li {
+            margin-bottom: 5px;
+            display: flex;
+        }
+
+        .specs-list li span:first-child {
+            font-weight: 500;
+            min-width: 100px;
+            color: var(--gray);
+        }
+
+        /* Image Slider Styles */
+        .image-slider {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .slider-images {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+        }
+
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            flex-shrink: 0;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 3;
+        }
+
+        .slider-btn:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .slider-prev {
+            left: 10px;
+        }
+
+        .slider-next {
+            right: 10px;
+        }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 3;
+        }
+
+        .slider-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slider-dot.active {
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.2);
+        }
+
+        /* Color Chips Styles */
+        .product-colors {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .color-chip {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            display: inline-block;
+        }
+
+        .color-chip:hover {
+            transform: scale(1.1);
+        }
+
+        .color-more {
+            font-size: 12px;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            margin-left: 4px;
+            font-weight: 500;
+        }
+
+        /* WhatsApp Floating Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(37, 211, 102, 0.6);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .form-submit {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        /* Auth Tabs */
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .auth-tab.active {
+            border-bottom: 2px solid var(--accent);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        /* Admin Panel Styles */
+        .admin-panel {
+            display: none;
+            padding: 20px 0 50px;
+            min-height: calc(100vh - 200px);
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .admin-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px 4px 0 0;
+            background-color: #f5f5f5;
+            transition: all 0.3s;
+        }
+
+        .admin-tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .admin-content {
+            display: none;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .admin-content.active {
+            display: block;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .admin-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .admin-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+            margin: 2px;
+        }
+
+        .btn-edit {
+            background-color: var(--info);
+            color: white;
+        }
+
+        .btn-delete {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-sm:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .admin-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Skeleton Loading Styles */
+        .skeleton-loading {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .skeleton-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .skeleton-image {
+            height: 280px;
+            background: #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skeleton-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            transform: translateX(-100%);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        .skeleton-content {
+            padding: 15px;
+        }
+
+        .skeleton-line {
+            height: 12px;
+            background: #f0f0f0;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skeleton-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            transform: translateX(-100%);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        .skeleton-line.short {
+            width: 60%;
+        }
+
+        .skeleton-line.medium {
+            width: 80%;
+        }
+
+        .skeleton-line.long {
+            width: 90%;
+        }
+
+        .skeleton-button {
+            height: 35px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skeleton-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            transform: translateX(-100%);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 50px 0 20px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: var(--accent);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #bdbdbd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .social-links a:hover {
+            background-color: var(--accent);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bdbdbd;
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-main {
+                flex-wrap: wrap;
+            }
+
+            .logo {
+                margin-bottom: 0;
+            }
+
+            .hamburger {
+                display: flex;
+                order: 2;
+            }
+
+            .header-actions {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                margin-top: 15px;
+                display: none;
+            }
+
+            .header-actions.mobile-visible {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--primary);
+                padding: 20px;
+                z-index: 99;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin-bottom: 15px;
+            }
+
+            .nav-links li:last-child {
+                margin-bottom: 0;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .admin-tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container header-main">
+            <a href="#" class="logo">Kiswah</a>
+
+            <!-- Categories Dropdown -->
+            <div class="categories-dropdown">
+                <button class="categories-btn">Categories <i class="fas fa-chevron-down"></i></button>
+                <div class="categories-content" id="categories-content">
+                    <!-- Categories will be dynamically loaded here -->
+                </div>
+            </div>
+
+            <!-- Hamburger Menu -->
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="header-actions">
+                <div class="action-item" onclick="showWishlistPage()" style="position: relative;">
+                    <i class="fas fa-heart"></i>
+                    <span>Wishlist</span>
+                    <span class="wishlist-count">0</span>
+                </div>
+                <div class="action-item" id="account-btn" onclick="toggleAuthModal()">
+                    <i class="fas fa-user"></i>
+                    <span>Account</span>
+                </div>
+                <div class="action-item" id="admin-link" style="display: none;" onclick="showAdminPanel()">
+                    <i class="fas fa-cog"></i>
+                    <span>Admin</span>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav-links" id="nav-links">
+            <!-- <li class="mobile-only"><a href="#" onclick="showWishlistPage(); closeMobileMenu()">Wishlist</a></li> -->
+            <!-- <li class="mobile-only"><a href="#" onclick="toggleAuthModal(); closeMobileMenu()">Account</a></li> -->
+            <!-- <li class="mobile-only" id="admin-link-mobile" style="display: none;"><a href="#" onclick="showAdminPanel(); closeMobileMenu()">Admin</a></li> -->
+        </ul>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container hero-content">
+                <h1>Elevate Your Style with KISWAH</h1>
+                <p>Discover our latest collection of premium clothing designed for the modern individual who values quality and style.</p>
+                <a href="#" class="btn" id="scrollBtn">Shop Now</a>
+            </div>
+        </section>
+
+        <!-- Category Display -->
+        <div class="container category-display" id="category-display" style="display: none;">
+            <h3>Currently Viewing: <span class="current-category" id="current-category">All Products</span></h3>
+        </div>
+
+        <!-- Featured Products section -->
+        <section class="container" id="products-section">
+            <h2 class="section-title">Featured Products</h2>
+            
+            <!-- Skeleton Loading -->
+            <div class="skeleton-loading" id="skeleton-loading">
+                <div class="skeleton-card">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-line medium"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-line medium"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-line medium"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+                <div class="skeleton-card">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-content">
+                        <div class="skeleton-line medium"></div>
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Products Container -->
+            <div class="products" id="products-container" style="display: none;">
+                <!-- Products will be dynamically loaded here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Wishlist Page -->
+    <section id="wishlist-page" class="wishlist-page container">
+        <!-- <h2 class="section-title">My Wishlist</h2> -->
+        <div class="wishlist-grid" id="wishlist-container">
+            <!-- Wishlist items will be dynamically added here -->
+        </div>
+        <div class="empty-wishlist" id="empty-wishlist">
+            <i class="far fa-heart"></i>
+            <p>Your wishlist is empty</p>
+            <a href="#" class="btn" onclick="showHomePage()">Continue Shopping</a>
+        </div>
+    </section>
+
+    <!-- Admin Panel -->
+    <section id="admin-panel" class="admin-panel container">
+        <div class="admin-header">
+            <h2 class="section-title">Admin Dashboard</h2>
+            <button class="btn" onclick="showHomePage()">Back to Store</button>
+        </div>
+
+        <div class="admin-tabs">
+            <div class="admin-tab active" onclick="switchAdminTab('products')">Products</div>
+            <div class="admin-tab" onclick="switchAdminTab('add-product')">Add Product</div>
+            <div class="admin-tab" onclick="switchAdminTab('categories')">Categories</div>
+        </div>
+
+        <div id="admin-products" class="admin-content active">
+            <h3>Product Management</h3>
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Colors</th>
+                            <th>Size</th>
+                            <th>Material</th>
+                            <th>Images</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-products-list">
+                        <!-- Products will be dynamically loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="admin-add-product" class="admin-content">
+            <h3 id="add-product-title">Add New Product</h3>
+            <form class="admin-form" id="add-product-form">
+                <div class="form-group">
+                    <label for="product-name">Product Name</label>
+                    <input type="text" id="product-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-category">Category</label>
+                    <select id="product-category" required>
+                        <option value="">Select Category</option>
+                        <!-- Categories will be dynamically loaded here -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="product-size">Size</label>
+                    <input type="text" id="product-size" placeholder="S, M, L, XL, XXL, XXXL" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-material">Material</label>
+                    <input type="text" id="product-material" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-colors">Colors (comma separated)</label>
+                    <input type="text" id="product-colors" placeholder="White, Black, Blue, Red" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-images">Image URLs (one per line)</label>
+                    <textarea id="product-images" rows="4" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg" required></textarea>
+                </div>
+                <button type="submit" class="form-submit" id="product-submit-btn">Add Product</button>
+            </form>
+        </div>
+
+        <div id="admin-categories" class="admin-content">
+            <h3>Category Management</h3>
+            <form class="admin-form" id="add-category-form">
+                <div class="form-group">
+                    <label for="category-name">Category Name</label>
+                    <input type="text" id="category-name" required>
+                </div>
+                <button type="submit" class="form-submit">Add Category</button>
+            </form>
+            
+            <div class="admin-table-container" style="margin-top: 30px;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Category ID</th>
+                            <th>Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-categories-list">
+                        <!-- Categories will be dynamically loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>KISWAH</h3>
+                    <p>139, Dr Sabne Rd, Mahabaleshwar, Maharashtra 412806</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Shop</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Men's Collection</a></li>
+                        <li><a href="#">Women's Collection</a></li>
+                        <li><a href="#">Accessories</a></li>
+                        <li><a href="#">New Arrivals</a></li>
+                        <li><a href="#">Sale</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="about-us.html">About Us</a></li>
+                        <li><a href="contact-us.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Shipping & Returns</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 KISWAH. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAuthModal()">&times;</span>
+            <h3>Account</h3>
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchAuthTab('login')">Login</div>
+                <div class="auth-tab" onclick="switchAuthTab('register')">Register</div>
+            </div>
+
+            <form id="login-form" class="auth-form active">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="form-submit">Login</button>
+            </form>
+
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="register-name">Full Name</label>
+                    <input type="text" id="register-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-phone">Phone Number</label>
+                    <input type="tel" id="register-phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" required>
+                </div>
+                <button type="submit" class="form-submit">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- WhatsApp Floating Button -->
+    <div class="whatsapp-float" onclick="openQuickWhatsApp()">
+        <i class="fab fa-whatsapp"></i>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDiCRubvpqNlkEdbiZxLNi6uvw12MM6QFI",
+  authDomain: "kiswah-120c0.firebaseapp.com",
+  projectId: "kiswah-120c0",
+  storageBucket: "kiswah-120c0.firebasestorage.app",
+  messagingSenderId: "236816406918",
+  appId: "1:236816406918:web:015f026bcec53fbb9af407",
+  measurementId: "G-3T9KJ1QCPJ"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // DOM Elements
+        const mainContent = document.getElementById('main-content');
+        const wishlistPage = document.getElementById('wishlist-page');
+        const adminPanel = document.getElementById('admin-panel');
+        const productsContainer = document.getElementById('products-container');
+        const skeletonLoading = document.getElementById('skeleton-loading');
+        const categoriesContent = document.getElementById('categories-content');
+        const categoryDisplay = document.getElementById('category-display');
+        const currentCategory = document.getElementById('current-category');
+        const authModal = document.getElementById('auth-modal');
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        const headerActions = document.querySelector('.header-actions');
+        const adminLink = document.getElementById('admin-link');
+        const adminLinkMobile = document.getElementById('admin-link-mobile');
+        const scrollBtn = document.getElementById('scrollBtn');
+        const wishlistContainer = document.getElementById('wishlist-container');
+        const emptyWishlist = document.getElementById('empty-wishlist');
+        const adminProductsList = document.getElementById('admin-products-list');
+        const adminCategoriesList = document.getElementById('admin-categories-list');
+        const addProductForm = document.getElementById('add-product-form');
+        const addCategoryForm = document.getElementById('add-category-form');
+        const productCategorySelect = document.getElementById('product-category');
+        const addProductTitle = document.getElementById('add-product-title');
+        const productSubmitBtn = document.getElementById('product-submit-btn');
+
+        // Global variables
+        let currentUser = null;
+        let products = [];
+        let categories = [];
+        let wishlist = [];
+        let editingProductId = null;
+        let selectedCategory = 'all';
+
+        // Initialize the app
+        function initApp() {
+            // Check authentication state
+            auth.onAuthStateChanged(user => {
+                currentUser = user;
+                if (user) {
+                    // User is signed in
+                    if (user.email === 'tosifshaikh1707@gmail.com') {
+                        // Show admin link for the specific admin email
+                        adminLink.style.display = 'flex';
+                        adminLinkMobile.style.display = 'block';
+                    }
+                    // Update UI for logged in user
+                    document.querySelector('.action-item span').textContent = 'Account';
+                    closeAuthModal();
+                } else {
+                    // User is signed out
+                    adminLink.style.display = 'none';
+                    adminLinkMobile.style.display = 'none';
+                    document.querySelector('.action-item span').textContent = 'Account';
+                }
+            });
+
+            // Load initial data
+            loadCategories();
+            loadProducts();
+            loadWishlist();
+
+            // Set up event listeners
+            setupEventListeners();
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Scroll to products
+            scrollBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('products-section').scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // Hamburger menu
+            hamburger.addEventListener('click', toggleMobileMenu);
+
+            // Auth forms
+            document.getElementById('login-form').addEventListener('submit', handleLogin);
+            document.getElementById('register-form').addEventListener('submit', handleRegister);
+
+            // Admin forms
+            addProductForm.addEventListener('submit', handleAddProduct);
+            addCategoryForm.addEventListener('submit', handleAddCategory);
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === authModal) {
+                    closeAuthModal();
+                }
+            });
+        }
+
+        // Load categories from Firestore
+        function loadCategories() {
+            db.collection('categories').get().then(snapshot => {
+                categories = [];
+                categoriesContent.innerHTML = '';
+                adminCategoriesList.innerHTML = '';
+                productCategorySelect.innerHTML = '<option value="">Select Category</option>';
+                
+                // Add "All Products" option
+                const allProductsLink = document.createElement('a');
+                allProductsLink.href = '#';
+                allProductsLink.textContent = 'All Products';
+                allProductsLink.onclick = () => filterProductsByCategory('all');
+                categoriesContent.appendChild(allProductsLink);
+                
+                snapshot.forEach(doc => {
+                    const category = { id: doc.id, ...doc.data() };
+                    categories.push(category);
+                    
+                    // Add to categories dropdown
+                    const categoryLink = document.createElement('a');
+                    categoryLink.href = '#';
+                    categoryLink.textContent = category.name;
+                    categoryLink.onclick = () => filterProductsByCategory(category.id);
+                    categoriesContent.appendChild(categoryLink);
+                    
+                    // Add to admin categories table
+                    const categoryRow = document.createElement('tr');
+                    categoryRow.innerHTML = `
+                        <td>${category.id}</td>
+                        <td>${category.name}</td>
+                        <td>
+                            <button class="btn-sm btn-edit">Edit</button>
+                            <button class="btn-sm btn-delete" onclick="deleteCategory('${category.id}')">Delete</button>
+                        </td>
+                    `;
+                    adminCategoriesList.appendChild(categoryRow);
+                    
+                    // Add to product category select
+                    const categoryOption = document.createElement('option');
+                    categoryOption.value = category.id;
+                    categoryOption.textContent = category.name;
+                    productCategorySelect.appendChild(categoryOption);
+                });
+            }).catch(error => {
+                console.error("Error loading categories: ", error);
+            });
+        }
+
+        // Load products from Firestore
+        function loadProducts() {
+            // Show skeleton loading
+            skeletonLoading.style.display = 'grid';
+            productsContainer.style.display = 'none';
+            
+            db.collection('products').get().then(snapshot => {
+                products = [];
+                productsContainer.innerHTML = '';
+                adminProductsList.innerHTML = '';
+                
+                snapshot.forEach(doc => {
+                    const product = { id: doc.id, ...doc.data() };
+                    products.push(product);
+                    
+                    // Create product card
+                    createProductCard(product);
+                    
+                    // Add to admin products table
+                    const productRow = document.createElement('tr');
+                    productRow.innerHTML = `
+                        <td>${product.id}</td>
+                        <td>${product.name}</td>
+                        <td>${getCategoryName(product.category)}</td>
+                        <td>${product.colors.join(', ')}</td>
+                        <td>${product.size}</td>
+                        <td>${product.material}</td>
+                        <td>${product.images.length}</td>
+                        <td>
+                            <button class="btn-sm btn-edit" onclick="editProduct('${product.id}')">Edit</button>
+                            <button class="btn-sm btn-delete" onclick="deleteProduct('${product.id}')">Delete</button>
+                        </td>
+                    `;
+                    adminProductsList.appendChild(productRow);
+                });
+                
+                // Hide skeleton and show products
+                setTimeout(() => {
+                    skeletonLoading.style.display = 'none';
+                    productsContainer.style.display = 'grid';
+                }, 1000);
+            }).catch(error => {
+                console.error("Error loading products: ", error);
+                // Hide skeleton even if there's an error
+                setTimeout(() => {
+                    skeletonLoading.style.display = 'none';
+                    productsContainer.style.display = 'grid';
+                }, 1000);
+            });
+        }
+
+        // Create product card
+        function createProductCard(product) {
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+            productCard.id = `product-${product.id}`;
+            
+            // Generate color chips HTML
+            const colorChips = product.colors.map(color => {
+                return `<div class="color-chip" style="background-color: ${color.toLowerCase()};" title="${color}"></div>`;
+            }).join('');
+            
+            // Generate image slider HTML
+            const sliderImages = product.images.map((image, index) => {
+                return `<div class="slide"><img src="${image}" alt="${product.name}" loading="lazy"></div>`;
+            }).join('');
+            
+            const sliderDots = product.images.map((_, index) => {
+                return `<div class="slider-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></div>`;
+            }).join('');
+            
+            productCard.innerHTML = `
+                <div class="product-image">
+                    <div class="image-slider">
+                        <div class="slider-images">
+                            ${sliderImages}
+                        </div>
+                        ${product.images.length > 1 ? `
+                            <button class="slider-btn slider-prev"><i class="fas fa-chevron-left"></i></button>
+                            <button class="slider-btn slider-next"><i class="fas fa-chevron-right"></i></button>
+                            <div class="slider-dots">
+                                ${sliderDots}
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div class="wishlist-btn" onclick="toggleWishlist('${product.id}')">
+                        <i class="${wishlist.includes(product.id) ? 'fas' : 'far'} fa-heart"></i>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title" onclick="toggleProductDetails('${product.id}')">${product.name}</h3>
+                    <div class="product-colors">
+                        ${colorChips}
+                        ${product.colors.length > 5 ? `<span class="color-more">+${product.colors.length - 5} more</span>` : ''}
+                    </div>
+                    <div class="product-actions">
+                        <button class="add-to-cart" onclick="openWhatsApp('${product.id}')">Ask for Enquiry</button>
+                    </div>
+                </div>
+                <div class="product-details">
+                    <div class="product-specs">
+                        <h4 class="specs-title">Product Details</h4>
+                        <ul class="specs-list">
+                            <li><span>Material:</span> <span>${product.material}</span></li>
+                            <li><span>Size:</span> <span>${product.size}</span></li>
+                            <li><span>Colors:</span> <span>${product.colors.join(', ')}</span></li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            productsContainer.appendChild(productCard);
+            
+            // Add event listeners for image slider if needed
+            if (product.images.length > 1) {
+                setupImageSlider(productCard, product.images.length);
+            }
+        }
+
+        // Setup image slider functionality
+        function setupImageSlider(productCard, imageCount) {
+            const sliderImages = productCard.querySelector('.slider-images');
+            const prevBtn = productCard.querySelector('.slider-prev');
+            const nextBtn = productCard.querySelector('.slider-next');
+            const dots = productCard.querySelectorAll('.slider-dot');
+            
+            let currentSlide = 0;
+            
+            function goToSlide(index) {
+                if (index < 0) index = imageCount - 1;
+                if (index >= imageCount) index = 0;
+                
+                currentSlide = index;
+                sliderImages.style.transform = `translateX(-${currentSlide * 100}%)`;
+                
+                // Update active dot
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === currentSlide);
+                });
+            }
+            
+            prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+            nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+            
+            dots.forEach((dot, i) => {
+                dot.addEventListener('click', () => goToSlide(i));
+            });
+        }
+
+        // Toggle product details
+        function toggleProductDetails(productId) {
+            const productCard = document.getElementById(`product-${productId}`);
+            const isExpanded = productCard.classList.contains('expanded');
+            
+            // Close all expanded cards first
+            document.querySelectorAll('.product-card.expanded').forEach(card => {
+                if (card.id !== `product-${productId}`) {
+                    card.classList.remove('expanded');
+                }
+            });
+            
+            // Toggle the clicked card
+            productCard.classList.toggle('expanded', !isExpanded);
+        }
+
+        // Toggle wishlist
+        function toggleWishlist(productId) {
+            const index = wishlist.indexOf(productId);
+            const wishlistBtn = document.querySelector(`#product-${productId} .wishlist-btn i`);
+            
+            if (index === -1) {
+                // Add to wishlist
+                wishlist.push(productId);
+                wishlistBtn.className = 'fas fa-heart';
+            } else {
+                // Remove from wishlist
+                wishlist.splice(index, 1);
+                wishlistBtn.className = 'far fa-heart';
+            }
+            
+            // Update wishlist count
+            document.querySelector('.wishlist-count').textContent = wishlist.length;
+            
+            // Save to localStorage
+            localStorage.setItem('kiswahWishlist', JSON.stringify(wishlist));
+            
+            // Update wishlist page if visible
+            if (wishlistPage.style.display === 'block') {
+                loadWishlist();
+            }
+        }
+
+        // Load wishlist from localStorage
+        function loadWishlist() {
+            const savedWishlist = localStorage.getItem('kiswahWishlist');
+            if (savedWishlist) {
+                wishlist = JSON.parse(savedWishlist);
+            }
+            
+            // Update wishlist count
+            document.querySelector('.wishlist-count').textContent = wishlist.length;
+            
+            // Update wishlist page
+            if (wishlist.length === 0) {
+                wishlistContainer.style.display = 'none';
+                emptyWishlist.style.display = 'block';
+            } else {
+                wishlistContainer.style.display = 'grid';
+                emptyWishlist.style.display = 'none';
+                
+                // Clear current wishlist display
+                wishlistContainer.innerHTML = '';
+                
+                // Add wishlist items
+                wishlist.forEach(productId => {
+                    const product = products.find(p => p.id === productId);
+                    if (product) {
+                        const wishlistItem = document.createElement('div');
+                        wishlistItem.className = 'product-card';
+                        wishlistItem.innerHTML = `
+                            <div class="product-image">
+                                <img src="${product.images[0]}" alt="${product.name}">
+                                <div class="wishlist-btn" onclick="toggleWishlist('${product.id}')">
+                                    <i class="fas fa-heart"></i>
+                                </div>
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-title">${product.name}</h3>
+                                <div class="product-actions">
+                                    <button class="add-to-cart" onclick="openWhatsApp('${product.id}')">Ask for Enquiry</button>
+                                </div>
+                            </div>
+                        `;
+                        wishlistContainer.appendChild(wishlistItem);
+                    }
+                });
+            }
+        }
+
+        // Open WhatsApp for product enquiry with image
+        function openWhatsApp(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                // Create a message with product details and image
+                const message = `Hello, I'm interested in this product: ${product.name}.\n\nProduct Details:\n- Material: ${product.material}\n- Size: ${product.size}\n- Colors: ${product.colors.join(', ')}\n\nPlease provide more details and pricing information.`;
+                
+                // For WhatsApp, we can't directly send images in the initial message
+                // But we can include the image URL in the message
+                const imageUrl = product.images[0];
+                const fullMessage = `${message}\n\nProduct Image: ${imageUrl}`;
+                
+                const url = `https://wa.me/919373186170?text=${encodeURIComponent(fullMessage)}`;
+                window.open(url, '_blank');
+            }
+        }
+
+        // Open WhatsApp for quick enquiry
+        function openQuickWhatsApp() {
+            const message = "Hello, I'm interested in your products. Can you please share your catalog?";
+            const url = `https://wa.me/919373186170?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        // Filter products by category
+        function filterProductsByCategory(categoryId) {
+            selectedCategory = categoryId;
+            
+            // Update category display
+            categoryDisplay.style.display = 'block';
+            if (categoryId === 'all') {
+                currentCategory.textContent = 'All Products';
+            } else {
+                const category = categories.find(c => c.id === categoryId);
+                currentCategory.textContent = category ? category.name : 'Unknown Category';
+            }
+            
+            // Filter products
+            if (categoryId === 'all') {
+                // Show all products
+                document.querySelectorAll('.product-card').forEach(card => {
+                    card.style.display = 'block';
+                });
+            } else {
+                // Filter by category
+                document.querySelectorAll('.product-card').forEach(card => {
+                    const productId = card.id.replace('product-', '');
+                    const product = products.find(p => p.id === productId);
+                    if (product && product.category === categoryId) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        // Get category name by ID
+        function getCategoryName(categoryId) {
+            const category = categories.find(c => c.id === categoryId);
+            return category ? category.name : 'Unknown';
+        }
+
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            headerActions.classList.toggle('mobile-visible');
+        }
+
+        // Close mobile menu
+        function closeMobileMenu() {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('active');
+            headerActions.classList.remove('mobile-visible');
+        }
+
+        // Show home page
+        function showHomePage() {
+            mainContent.style.display = 'block';
+            wishlistPage.style.display = 'none';
+            adminPanel.style.display = 'none';
+            // Reset category display
+            categoryDisplay.style.display = 'none';
+            selectedCategory = 'all';
+            // Show all products
+            filterProductsByCategory('all');
+        }
+
+        // Show wishlist page
+        function showWishlistPage() {
+            mainContent.style.display = 'none';
+            wishlistPage.style.display = 'block';
+            adminPanel.style.display = 'none';
+            loadWishlist();
+        }
+
+        // Show admin panel
+        function showAdminPanel() {
+            if (currentUser && currentUser.email === 'tosifshaikh1707@gmail.com') {
+                mainContent.style.display = 'none';
+                wishlistPage.style.display = 'none';
+                adminPanel.style.display = 'block';
+            } else {
+                toggleAuthModal();
+            }
+        }
+
+        // Switch admin tab
+        function switchAdminTab(tabName) {
+            // Update active tab
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`.admin-tab:nth-child(${tabName === 'products' ? 1 : tabName === 'add-product' ? 2 : 3})`).classList.add('active');
+            
+            // Update active content
+            document.querySelectorAll('.admin-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`admin-${tabName}`).classList.add('active');
+        }
+
+        // Toggle auth modal
+        function toggleAuthModal() {
+            if (currentUser) {
+                // User is logged in, show account options or log out
+                if (confirm('Do you want to log out?')) {
+                    auth.signOut();
+                }
+            } else {
+                // User is not logged in, show auth modal
+                authModal.style.display = 'flex';
+                switchAuthTab('login');
+            }
+        }
+
+        // Close auth modal
+        function closeAuthModal() {
+            authModal.style.display = 'none';
+        }
+
+        // Switch auth tab
+        function switchAuthTab(tabName) {
+            // Update active tab
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`.auth-tab:nth-child(${tabName === 'login' ? 1 : 2})`).classList.add('active');
+            
+            // Update active form
+            document.querySelectorAll('.auth-form').forEach(form => {
+                form.classList.remove('active');
+            });
+            document.getElementById(`${tabName}-form`).classList.add('active');
+        }
+
+        // Handle login
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    // Signed in successfully
+                    currentUser = userCredential.user;
+                    closeAuthModal();
+                    
+                    if (email === 'tosifshaikh1707@gmail.com') {
+                        showAdminPanel();
+                    }
+                })
+                .catch(error => {
+                    alert('Login failed: ' + error.message);
+                });
+        }
+
+        // Handle register
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const phone = document.getElementById('register-phone').value;
+            const password = document.getElementById('register-password').value;
+            
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    // User created successfully
+                    currentUser = userCredential.user;
+                    
+                    // Save additional user data to Firestore
+                    return db.collection('users').doc(userCredential.user.uid).set({
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                })
+                .then(() => {
+                    closeAuthModal();
+                    if (email === 'tosifshaikh1707@gmail.com') {
+                        showAdminPanel();
+                    }
+                })
+                .catch(error => {
+                    alert('Registration failed: ' + error.message);
+                });
+        }
+
+        // Handle add/update product
+        function handleAddProduct(e) {
+            e.preventDefault();
+            
+            if (!currentUser || currentUser.email !== 'tosifshaikh1707@gmail.com') {
+                alert('Only admin can add products');
+                return;
+            }
+            
+            const name = document.getElementById('product-name').value;
+            const category = document.getElementById('product-category').value;
+            const size = document.getElementById('product-size').value;
+            const material = document.getElementById('product-material').value;
+            const colors = document.getElementById('product-colors').value.split(',').map(c => c.trim());
+            const images = document.getElementById('product-images').value.split('\n').map(i => i.trim()).filter(i => i);
+            
+            const productData = {
+                name: name,
+                category: category,
+                size: size,
+                material: material,
+                colors: colors,
+                images: images,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            if (editingProductId) {
+                // Update existing product
+                db.collection('products').doc(editingProductId).update(productData)
+                .then(() => {
+                    alert('Product updated successfully!');
+                    resetProductForm();
+                    loadProducts();
+                })
+                .catch(error => {
+                    alert('Error updating product: ' + error.message);
+                });
+            } else {
+                // Add new product
+                productData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                
+                db.collection('products').add(productData)
+                .then(() => {
+                    alert('Product added successfully!');
+                    resetProductForm();
+                    loadProducts();
+                })
+                .catch(error => {
+                    alert('Error adding product: ' + error.message);
+                });
+            }
+        }
+
+        // Edit product
+        function editProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            // Populate form with product data
+            document.getElementById('product-name').value = product.name;
+            document.getElementById('product-category').value = product.category;
+            document.getElementById('product-size').value = product.size;
+            document.getElementById('product-material').value = product.material;
+            document.getElementById('product-colors').value = product.colors.join(', ');
+            document.getElementById('product-images').value = product.images.join('\n');
+            
+            // Update form for editing
+            editingProductId = productId;
+            addProductTitle.textContent = 'Edit Product';
+            productSubmitBtn.textContent = 'Update Product';
+            
+            // Switch to add product tab
+            switchAdminTab('add-product');
+        }
+
+        // Reset product form
+        function resetProductForm() {
+            addProductForm.reset();
+            editingProductId = null;
+            addProductTitle.textContent = 'Add New Product';
+            productSubmitBtn.textContent = 'Add Product';
+        }
+
+        // Handle add category
+        function handleAddCategory(e) {
+            e.preventDefault();
+            
+            if (!currentUser || currentUser.email !== 'tosifshaikh1707@gmail.com') {
+                alert('Only admin can add categories');
+                return;
+            }
+            
+            const name = document.getElementById('category-name').value;
+            
+            // Add category to Firestore
+            db.collection('categories').add({
+                name: name,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                alert('Category added successfully!');
+                addCategoryForm.reset();
+                loadCategories();
+            })
+            .catch(error => {
+                alert('Error adding category: ' + error.message);
+            });
+        }
+
+        // Delete product
+        function deleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                db.collection('products').doc(productId).delete()
+                    .then(() => {
+                        alert('Product deleted successfully!');
+                        loadProducts();
+                    })
+                    .catch(error => {
+                        alert('Error deleting product: ' + error.message);
+                    });
+            }
+        }
+
+        // Delete category
+        function deleteCategory(categoryId) {
+            if (confirm('Are you sure you want to delete this category?')) {
+                db.collection('categories').doc(categoryId).delete()
+                    .then(() => {
+                        alert('Category deleted successfully!');
+                        loadCategories();
+                    })
+                    .catch(error => {
+                        alert('Error deleting category: ' + error.message);
+                    });
+            }
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
