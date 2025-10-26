@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KISWAH - Premium Clothing Brand</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -29,6 +32,42 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
+        }
+
+        .analytics-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-card h4 {
+            margin: 0 0 10px 0;
+            color: var(--gray);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .recent-activity {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         body {
@@ -91,7 +130,8 @@
             margin-bottom: 4px;
         }
 
-        .cart-count, .wishlist-count {
+        .cart-count,
+        .wishlist-count {
             background-color: var(--accent);
             color: white;
             border-radius: 50%;
@@ -181,7 +221,7 @@
             position: absolute;
             background-color: white;
             min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             z-index: 1;
             border-radius: 4px;
             overflow: hidden;
@@ -552,111 +592,112 @@
             flex-wrap: wrap;
             align-items: center;
         }
-  /* Color Picker Styles */
-  .color-picker-container {
-    margin-bottom: 20px;
-  }
-  
-  .color-picker-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-  }
-  
-  .color-palette {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 10px;
-  }
-  
-  .color-option {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: all 0.2s ease;
-  }
-  
-  .color-option:hover {
-    transform: scale(1.1);
-  }
-  
-  .color-option.selected {
-    border-color: #333;
-    transform: scale(1.1);
-  }
-  
-  .custom-color-input {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    margin-top: 10px;
-  }
-  
-  .custom-color-preview {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: 1px solid #ddd;
-  }
-  
-  .custom-color-input input {
-    flex: 1;
-    padding: 8px 12px;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-  }
-  
-  .add-color-btn {
-    background-color: var(--accent);
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-  }
-  
-  .selected-colors {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 15px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-radius: 4px;
-    min-height: 50px;
-  }
-  
-  .selected-color-chip {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 5px 10px;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
-  .selected-color-preview {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-  }
-  
-  .remove-color {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #999;
-    font-size: 14px;
-  }
-  
-  .remove-color:hover {
-    color: var(--danger);
-  }
+
+        /* Color Picker Styles */
+        .color-picker-container {
+            margin-bottom: 20px;
+        }
+
+        .color-picker-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .color-palette {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.selected {
+            border-color: #333;
+            transform: scale(1.1);
+        }
+
+        .custom-color-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .custom-color-preview {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+        }
+
+        .custom-color-input input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        .add-color-btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .selected-colors {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            min-height: 50px;
+        }
+
+        .selected-color-chip {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .selected-color-preview {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+        }
+
+        .remove-color {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .remove-color:hover {
+            color: var(--danger);
+        }
 
         .color-chip {
             width: 20px;
@@ -749,7 +790,9 @@
             font-weight: 500;
         }
 
-        .form-group input, .form-group select, .form-group textarea {
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
             width: 100%;
             padding: 12px 15px;
             border: 1px solid var(--border);
@@ -928,7 +971,7 @@
             bottom: 0;
             left: 0;
             transform: translateX(-100%);
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
             animation: shimmer 1.5s infinite;
         }
 
@@ -953,7 +996,7 @@
             bottom: 0;
             left: 0;
             transform: translateX(-100%);
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
             animation: shimmer 1.5s infinite;
         }
 
@@ -986,7 +1029,7 @@
             bottom: 0;
             left: 0;
             transform: translateX(-100%);
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
             animation: shimmer 1.5s infinite;
         }
 
@@ -1128,54 +1171,58 @@
                 flex-wrap: wrap;
             }
         }
+
         /*  */
         /* Logo Styles */
-.logo {
-    text-align: center;
-}
+        .logo {
+            text-align: center;
+        }
 
-.logo-main {
-    font-family: 'Playfair Display', serif;
-    font-size: 35px;
-    font-weight: 700;
-    color: rgb(198, 178, 65);
-    letter-spacing: 5px;
-    line-height: 1;
-}
+        .logo-main {
+            font-family: 'Playfair Display', serif;
+            font-size: 35px;
+            font-weight: 700;
+            color: rgb(198, 178, 65);
+            letter-spacing: 5px;
+            line-height: 1;
+        }
 
-.logo-subtitle {
-    font-family: 'Poppins', sans-serif;
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.8);
-    letter-spacing: 10px;
-    text-transform: uppercase;
-    margin-top: 2px;
-    font-weight: 400;
-}
+        .logo-subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            margin-top: 2px;
+            font-weight: 400;
+        }
 
-/* For mobile responsiveness */
-@media (max-width: 768px) {
-    .logo-main {
-        font-size: 28px;
-        letter-spacing: 4px;
-    }
-    
-    .logo-subtitle {
-        font-size: 10px;
-        letter-spacing: 7.2px;
-    }
-}
+        /* For mobile responsiveness */
+        @media (max-width: 768px) {
+            .logo-main {
+                font-size: 28px;
+                letter-spacing: 4px;
+            }
+
+            .logo-subtitle {
+                font-size: 10px;
+                letter-spacing: 7.2px;
+            }
+        }
     </style>
+    <!-- Add this right before </head> -->
+    <script defer src="/_vercel/insights/script.js"></script>
 </head>
+
 <body>
     <!-- Header Section -->
     <header>
         <div class="container header-main">
             <!-- Replace your current logo in the header with this: -->
-<div class="logo">
-    <div class="logo-main">KISWAH</div>
-    <div class="logo-subtitle">Collection</div>
-</div>
+            <div class="logo">
+                <div class="logo-main">KISWAH</div>
+                <div class="logo-subtitle">Collection</div>
+            </div>
 
             <!-- Categories Dropdown -->
             <div class="categories-dropdown">
@@ -1206,7 +1253,8 @@
 
         <ul class="nav-links" id="nav-links">
             <li class="mobile-only"><a href="#" onclick="toggleAuthModal(); closeMobileMenu()">Account</a></li>
-            <li class="mobile-only" id="admin-link-mobile" style="display: none;"><a href="#" onclick="showAdminPanel(); closeMobileMenu()">Admin</a></li>
+            <li class="mobile-only" id="admin-link-mobile" style="display: none;"><a href="#"
+                    onclick="showAdminPanel(); closeMobileMenu()">Admin</a></li>
         </ul>
         <script async src="https://imgbb.com/upload.js"></script>
     </header>
@@ -1217,7 +1265,8 @@
         <section class="hero">
             <div class="container hero-content">
                 <h1>Elevate Your Style with KISWAH</h1>
-                <p>Discover our latest collection of premium clothing designed for the modern individual who values quality and style.</p>
+                <p>Discover our latest collection of premium clothing designed for the modern individual who values
+                    quality and style.</p>
                 <a href="#" class="btn" id="scrollBtn">Shop Now</a>
             </div>
         </section>
@@ -1230,7 +1279,7 @@
         <!-- Featured Products section -->
         <section class="container" id="products-section">
             <h2 class="section-title">Featured Products</h2>
-            
+
             <!-- Skeleton Loading -->
             <div class="skeleton-loading" id="skeleton-loading">
                 <div class="skeleton-card">
@@ -1266,7 +1315,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Products Container -->
             <div class="products" id="products-container" style="display: none;">
                 <!-- Products will be dynamically loaded here -->
@@ -1275,6 +1324,34 @@
     </main>
 
     <!-- Admin Panel -->
+    <!-- Add this to your admin panel tabs -->
+    <div class="admin-tab" onclick="switchAdminTab('analytics')">Analytics</div>
+
+    <!-- Add this to your admin content sections -->
+    <div id="admin-analytics" class="admin-content">
+        <h3>Website Analytics</h3>
+        <div class="analytics-stats">
+            <div class="stat-card">
+                <h4>Today's Visitors</h4>
+                <div class="stat-number" id="today-visitors">0</div>
+            </div>
+            <div class="stat-card">
+                <h4>Total Products</h4>
+                <div class="stat-number" id="total-products">0</div>
+            </div>
+            <div class="stat-card">
+                <h4>Total Categories</h4>
+                <div class="stat-number" id="total-categories">0</div>
+            </div>
+        </div>
+
+        <div class="recent-activity" style="margin-top: 30px;">
+            <h4>Recent Activity</h4>
+            <div id="recent-activity-list">
+                <!-- Activity will be loaded here -->
+            </div>
+        </div>
+    </div>
     <section id="admin-panel" class="admin-panel container">
         <div class="admin-header">
             <h2 class="section-title">Admin Dashboard</h2>
@@ -1342,48 +1419,52 @@
                     <label for="product-material">Material</label>
                     <input type="text" id="product-material" required>
                 </div>
-               <!-- Replace the current product-colors form group with this: -->
-<div class="form-group">
-  <div class="color-picker-container">
-    <label class="color-picker-label">Colors</label>
-    
-    <div class="color-palette" id="color-palette">
-      <!-- Common clothing colors -->
-      <div class="color-option" style="background-color: #000000;" data-color="Black"></div>
-      <div class="color-option" style="background-color: #FFFFFF; border: 1px solid #ddd;" data-color="White"></div>
-      <div class="color-option" style="background-color: #808080;" data-color="Gray"></div>
-      <div class="color-option" style="background-color: #964B00;" data-color="Brown"></div>
-      <div class="color-option" style="background-color: #FF0000;" data-color="Red"></div>
-      <div class="color-option" style="background-color: #0000FF;" data-color="Blue"></div>
-      <div class="color-option" style="background-color: #008000;" data-color="Green"></div>
-      <div class="color-option" style="background-color: #FFFF00;" data-color="Yellow"></div>
-      <div class="color-option" style="background-color: #FFA500;" data-color="Orange"></div>
-      <div class="color-option" style="background-color: #800080;" data-color="Purple"></div>
-      <div class="color-option" style="background-color: #FFC0CB;" data-color="Pink"></div>
-      <div class="color-option" style="background-color: #A52A2A;" data-color="Maroon"></div>
-      <div class="color-option" style="background-color: #00FFFF;" data-color="Cyan"></div>
-      <div class="color-option" style="background-color: #4B0082;" data-color="Indigo"></div>
-      <div class="color-option" style="background-color: #FFD700;" data-color="Gold"></div>
-      <div class="color-option" style="background-color: #C0C0C0;" data-color="Silver"></div>
-    </div>
-    
-    <div class="custom-color-input">
-      <div class="custom-color-preview" id="custom-color-preview"></div>
-      <input type="text" id="custom-color-input" placeholder="Enter custom color name or hex code">
-      <button type="button" class="add-color-btn" id="add-custom-color">Add Color</button>
-    </div>
-    
-    <div class="selected-colors" id="selected-colors">
-      <!-- Selected colors will appear here -->
-    </div>
-    
-    <!-- Hidden input to store the selected colors for form submission -->
-    <input type="hidden" id="product-colors" name="product-colors" required>
-  </div>
-</div>
+                <!-- Replace the current product-colors form group with this: -->
+                <div class="form-group">
+                    <div class="color-picker-container">
+                        <label class="color-picker-label">Colors</label>
+
+                        <div class="color-palette" id="color-palette">
+                            <!-- Common clothing colors -->
+                            <div class="color-option" style="background-color: #000000;" data-color="Black"></div>
+                            <div class="color-option" style="background-color: #FFFFFF; border: 1px solid #ddd;"
+                                data-color="White"></div>
+                            <div class="color-option" style="background-color: #808080;" data-color="Gray"></div>
+                            <div class="color-option" style="background-color: #964B00;" data-color="Brown"></div>
+                            <div class="color-option" style="background-color: #FF0000;" data-color="Red"></div>
+                            <div class="color-option" style="background-color: #0000FF;" data-color="Blue"></div>
+                            <div class="color-option" style="background-color: #008000;" data-color="Green"></div>
+                            <div class="color-option" style="background-color: #FFFF00;" data-color="Yellow"></div>
+                            <div class="color-option" style="background-color: #FFA500;" data-color="Orange"></div>
+                            <div class="color-option" style="background-color: #800080;" data-color="Purple"></div>
+                            <div class="color-option" style="background-color: #FFC0CB;" data-color="Pink"></div>
+                            <div class="color-option" style="background-color: #A52A2A;" data-color="Maroon"></div>
+                            <div class="color-option" style="background-color: #00FFFF;" data-color="Cyan"></div>
+                            <div class="color-option" style="background-color: #4B0082;" data-color="Indigo"></div>
+                            <div class="color-option" style="background-color: #FFD700;" data-color="Gold"></div>
+                            <div class="color-option" style="background-color: #C0C0C0;" data-color="Silver"></div>
+                        </div>
+
+                        <div class="custom-color-input">
+                            <div class="custom-color-preview" id="custom-color-preview"></div>
+                            <input type="text" id="custom-color-input"
+                                placeholder="Enter custom color name or hex code">
+                            <button type="button" class="add-color-btn" id="add-custom-color">Add Color</button>
+                        </div>
+
+                        <div class="selected-colors" id="selected-colors">
+                            <!-- Selected colors will appear here -->
+                        </div>
+
+                        <!-- Hidden input to store the selected colors for form submission -->
+                        <input type="hidden" id="product-colors" name="product-colors" required>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="product-images">Image URLs (one per line)</label>
-                    <textarea id="product-images" rows="4" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg" required></textarea>
+                    <textarea id="product-images" rows="4"
+                        placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"
+                        required></textarea>
                 </div>
                 <button type="submit" class="form-submit" id="product-submit-btn">Add Product</button>
             </form>
@@ -1398,7 +1479,7 @@
                 </div>
                 <button type="submit" class="form-submit">Add Category</button>
             </form>
-            
+
             <div class="admin-table-container" style="margin-top: 30px;">
                 <table class="admin-table">
                     <thead>
@@ -1513,17 +1594,86 @@
         <i class="fab fa-whatsapp"></i>
     </div>
 
+
     <script>
         // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDiCRubvpqNlkEdbiZxLNi6uvw12MM6QFI",
-  authDomain: "kiswah-120c0.firebaseapp.com",
-  projectId: "kiswah-120c0",
-  storageBucket: "kiswah-120c0.firebasestorage.app",
-  messagingSenderId: "236816406918",
-  appId: "1:236816406918:web:015f026bcec53fbb9af407",
-  measurementId: "G-3T9KJ1QCPJ"
+            authDomain: "kiswah-120c0.firebaseapp.com",
+            projectId: "kiswah-120c0",
+            storageBucket: "kiswah-120c0.firebasestorage.app",
+            messagingSenderId: "236816406918",
+            appId: "1:236816406918:web:015f026bcec53fbb9af407",
+            measurementId: "G-3T9KJ1QCPJ"
         };
+
+        // Add this to your existing script section, after Firebase configuration
+        const vercelAnalytics = {
+            trackPageview: function () {
+                if (window.va) {
+                    window.va('event', 'pageview', {
+                        url: window.location.pathname
+                    });
+                }
+            },
+
+            trackEvent: function (eventName, data) {
+                if (window.va) {
+                    window.va('event', eventName, data);
+                }
+            }
+        };
+
+        // Track page views
+        document.addEventListener('DOMContentLoaded', function () {
+            vercelAnalytics.trackPageview();
+
+            // Track route changes (for SPA-like behavior)
+            const originalShowHomePage = showHomePage;
+            const originalShowAdminPanel = showAdminPanel;
+
+            showHomePage = function () {
+                originalShowHomePage();
+                setTimeout(() => vercelAnalytics.trackPageview(), 100);
+            };
+
+            showAdminPanel = function () {
+                originalShowAdminPanel();
+                setTimeout(() => vercelAnalytics.trackPageview(), 100);
+            };
+        });
+
+        // Add these functions to your existing script
+        function trackProductView(productId, productName) {
+            vercelAnalytics.trackEvent('product_view', {
+                product_id: productId,
+                product_name: productName,
+                category: selectedCategory
+            });
+        }
+
+        function trackWhatsAppEnquiry(productId, productName) {
+            vercelAnalytics.trackEvent('whatsapp_enquiry', {
+                product_id: productId,
+                product_name: productName,
+                category: selectedCategory
+            });
+        }
+
+        function trackCategoryView(categoryId, categoryName) {
+            vercelAnalytics.trackEvent('category_view', {
+                category_id: categoryId,
+                category_name: categoryName
+            });
+        }
+
+        function trackAdminAction(action, details) {
+            vercelAnalytics.trackEvent('admin_action', {
+                action: action,
+                details: details,
+                user_email: currentUser ? currentUser.email : 'anonymous'
+            });
+        }
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -1594,7 +1744,7 @@
         // Set up event listeners
         function setupEventListeners() {
             // Scroll to products
-            scrollBtn.addEventListener('click', function(e) {
+            scrollBtn.addEventListener('click', function (e) {
                 e.preventDefault();
                 document.getElementById('products-section').scrollIntoView({ behavior: 'smooth' });
             });
@@ -1611,7 +1761,7 @@
             addCategoryForm.addEventListener('submit', handleAddCategory);
 
             // Close modal when clicking outside
-            window.addEventListener('click', function(e) {
+            window.addEventListener('click', function (e) {
                 if (e.target === authModal) {
                     closeAuthModal();
                 }
@@ -1625,25 +1775,25 @@
                 categoriesContent.innerHTML = '';
                 adminCategoriesList.innerHTML = '';
                 productCategorySelect.innerHTML = '<option value="">Select Category</option>';
-                
+
                 // Add "All Products" option
                 const allProductsLink = document.createElement('a');
                 allProductsLink.href = '#';
                 allProductsLink.textContent = 'All Products';
                 allProductsLink.onclick = () => filterProductsByCategory('all');
                 categoriesContent.appendChild(allProductsLink);
-                
+
                 snapshot.forEach(doc => {
                     const category = { id: doc.id, ...doc.data() };
                     categories.push(category);
-                    
+
                     // Add to categories dropdown
                     const categoryLink = document.createElement('a');
                     categoryLink.href = '#';
                     categoryLink.textContent = category.name;
                     categoryLink.onclick = () => filterProductsByCategory(category.id);
                     categoriesContent.appendChild(categoryLink);
-                    
+
                     // Add to admin categories table
                     const categoryRow = document.createElement('tr');
                     categoryRow.innerHTML = `
@@ -1655,7 +1805,7 @@
                         </td>
                     `;
                     adminCategoriesList.appendChild(categoryRow);
-                    
+
                     // Add to product category select
                     const categoryOption = document.createElement('option');
                     categoryOption.value = category.id;
@@ -1677,18 +1827,18 @@
                 { id: 'womens', name: 'Women\'s Collection' },
                 { id: 'accessories', name: 'Accessories' }
             ];
-            
+
             categoriesContent.innerHTML = '';
             adminCategoriesList.innerHTML = '';
             productCategorySelect.innerHTML = '<option value="">Select Category</option>';
-            
+
             // Add "All Products" option
             const allProductsLink = document.createElement('a');
             allProductsLink.href = '#';
             allProductsLink.textContent = 'All Products';
             allProductsLink.onclick = () => filterProductsByCategory('all');
             categoriesContent.appendChild(allProductsLink);
-            
+
             categories.forEach(category => {
                 // Add to categories dropdown
                 const categoryLink = document.createElement('a');
@@ -1696,7 +1846,7 @@
                 categoryLink.textContent = category.name;
                 categoryLink.onclick = () => filterProductsByCategory(category.id);
                 categoriesContent.appendChild(categoryLink);
-                
+
                 // Add to admin categories table
                 const categoryRow = document.createElement('tr');
                 categoryRow.innerHTML = `
@@ -1708,7 +1858,7 @@
                     </td>
                 `;
                 adminCategoriesList.appendChild(categoryRow);
-                
+
                 // Add to product category select
                 const categoryOption = document.createElement('option');
                 categoryOption.value = category.id;
@@ -1722,19 +1872,19 @@
             // Show skeleton loading
             skeletonLoading.style.display = 'grid';
             productsContainer.style.display = 'none';
-            
+
             db.collection('products').get().then(snapshot => {
                 products = [];
                 productsContainer.innerHTML = '';
                 adminProductsList.innerHTML = '';
-                
+
                 snapshot.forEach(doc => {
                     const product = { id: doc.id, ...doc.data() };
                     products.push(product);
-                    
+
                     // Create product card
                     createProductCard(product);
-                    
+
                     // Add to admin products table
                     const productRow = document.createElement('tr');
                     productRow.innerHTML = `
@@ -1754,7 +1904,7 @@
                     `;
                     adminProductsList.appendChild(productRow);
                 });
-                
+
                 // Hide skeleton and show products
                 setTimeout(() => {
                     skeletonLoading.style.display = 'none';
@@ -1775,26 +1925,26 @@
             const productCard = document.createElement('div');
             productCard.className = 'product-card';
             productCard.id = `product-${product.id}`;
-            
+
             // Calculate discounted price
             const price = product.price || 0;
             const discount = product.discount || 0;
             const discountedPrice = price - (price * discount / 100);
-            
+
             // Generate color chips HTML
             const colorChips = product.colors.map(color => {
                 return `<div class="color-chip" style="background-color: ${color.toLowerCase()};" title="${color}"></div>`;
             }).join('');
-            
+
             // Generate image slider HTML
             const sliderImages = product.images.map((image, index) => {
                 return `<div class="slide"><img src="${image}" alt="${product.name}" loading="lazy"></div>`;
             }).join('');
-            
+
             const sliderDots = product.images.map((_, index) => {
                 return `<div class="slider-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></div>`;
             }).join('');
-            
+
             productCard.innerHTML = `
                 <div class="product-image">
                     <div class="image-slider">
@@ -1842,9 +1992,9 @@
                     </div>
                 </div>
             `;
-            
+
             productsContainer.appendChild(productCard);
-            
+
             // Add event listeners for image slider if needed
             if (product.images.length > 1) {
                 setupImageSlider(productCard, product.images.length);
@@ -1857,25 +2007,25 @@
             const prevBtn = productCard.querySelector('.slider-prev');
             const nextBtn = productCard.querySelector('.slider-next');
             const dots = productCard.querySelectorAll('.slider-dot');
-            
+
             let currentSlide = 0;
-            
+
             function goToSlide(index) {
                 if (index < 0) index = imageCount - 1;
                 if (index >= imageCount) index = 0;
-                
+
                 currentSlide = index;
                 sliderImages.style.transform = `translateX(-${currentSlide * 100}%)`;
-                
+
                 // Update active dot
                 dots.forEach((dot, i) => {
                     dot.classList.toggle('active', i === currentSlide);
                 });
             }
-            
+
             prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
             nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
-            
+
             dots.forEach((dot, i) => {
                 dot.addEventListener('click', () => goToSlide(i));
             });
@@ -1885,35 +2035,46 @@
         function toggleProductDetails(productId) {
             const productCard = document.getElementById(`product-${productId}`);
             const isExpanded = productCard.classList.contains('expanded');
-            
+
+            // Track product view when expanded
+            if (!isExpanded) {
+                const product = products.find(p => p.id === productId);
+                if (product) {
+                    trackProductView(productId, product.name);
+                }
+            }
+
             // Close all expanded cards first
             document.querySelectorAll('.product-card.expanded').forEach(card => {
                 if (card.id !== `product-${productId}`) {
                     card.classList.remove('expanded');
                 }
             });
-            
+
             // Toggle the clicked card
             productCard.classList.toggle('expanded', !isExpanded);
         }
 
-        // Open WhatsApp for product enquiry with image
+        // Update the openWhatsApp function
         function openWhatsApp(productId) {
             const product = products.find(p => p.id === productId);
             if (product) {
+                // Track WhatsApp enquiry
+                trackWhatsAppEnquiry(productId, product.name);
+
                 // Calculate discounted price
                 const price = product.price || 0;
                 const discount = product.discount || 0;
                 const discountedPrice = price - (price * discount / 100);
-                
+
                 // Create a message with product details and image
                 const message = `Hello, I'm interested in this product: ${product.name}.\n\nProduct Details:\n- Material: ${product.material}\n- Size: ${product.size}\n- Colors: ${product.colors.join(', ')}\n- Price: ₹${price.toFixed(2)}${discount > 0 ? `\n- Discount: ${discount}% OFF\n- Final Price: ₹${discountedPrice.toFixed(2)}` : ''}\n\nPlease provide more details and availability information.`;
-                
+
                 // For WhatsApp, we can't directly send images in the initial message
                 // But we can include the image URL in the message
                 const imageUrl = product.images[0];
                 const fullMessage = `${message}\n\nProduct Image: ${imageUrl}`;
-                
+
                 const url = `https://wa.me/919373186170?text=${encodeURIComponent(fullMessage)}`;
                 window.open(url, '_blank');
             }
@@ -1929,7 +2090,13 @@
         // Filter products by category
         function filterProductsByCategory(categoryId) {
             selectedCategory = categoryId;
-            
+
+            // Track category view
+            const category = categories.find(c => c.id === categoryId);
+            if (category) {
+                trackCategoryView(categoryId, category.name);
+            }
+
             // Update category display
             categoryDisplay.style.display = 'block';
             if (categoryId === 'all') {
@@ -1938,7 +2105,7 @@
                 const category = categories.find(c => c.id === categoryId);
                 currentCategory.textContent = category ? category.name : 'Unknown Category';
             }
-            
+
             // Filter products
             if (categoryId === 'all') {
                 // Show all products
@@ -2007,7 +2174,7 @@
                 tab.classList.remove('active');
             });
             document.querySelector(`.admin-tab:nth-child(${tabName === 'products' ? 1 : tabName === 'add-product' ? 2 : 3})`).classList.add('active');
-            
+
             // Update active content
             document.querySelectorAll('.admin-content').forEach(content => {
                 content.classList.remove('active');
@@ -2041,7 +2208,7 @@
                 tab.classList.remove('active');
             });
             document.querySelector(`.auth-tab:nth-child(${tabName === 'login' ? 1 : 2})`).classList.add('active');
-            
+
             // Update active form
             document.querySelectorAll('.auth-form').forEach(form => {
                 form.classList.remove('active');
@@ -2054,13 +2221,13 @@
             e.preventDefault();
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
-            
+
             auth.signInWithEmailAndPassword(email, password)
                 .then(userCredential => {
                     // Signed in successfully
                     currentUser = userCredential.user;
                     closeAuthModal();
-                    
+
                     if (email === 'tosifshaikh1707@gmail.com') {
                         showAdminPanel();
                     }
@@ -2077,12 +2244,12 @@
             const email = document.getElementById('register-email').value;
             const phone = document.getElementById('register-phone').value;
             const password = document.getElementById('register-password').value;
-            
+
             auth.createUserWithEmailAndPassword(email, password)
                 .then(userCredential => {
                     // User created successfully
                     currentUser = userCredential.user;
-                    
+
                     // Save additional user data to Firestore
                     return db.collection('users').doc(userCredential.user.uid).set({
                         name: name,
@@ -2105,12 +2272,12 @@
         // Handle add/update product
         function handleAddProduct(e) {
             e.preventDefault();
-            
+
             if (!currentUser || currentUser.email !== 'tosifshaikh1707@gmail.com') {
                 alert('Only admin can add products');
                 return;
             }
-            
+
             const name = document.getElementById('product-name').value;
             const category = document.getElementById('product-category').value;
             const price = parseFloat(document.getElementById('product-price').value);
@@ -2119,7 +2286,7 @@
             const material = document.getElementById('product-material').value;
             const colors = document.getElementById('product-colors').value.split(',').map(c => c.trim());
             const images = document.getElementById('product-images').value.split('\n').map(i => i.trim()).filter(i => i);
-            
+
             const productData = {
                 name: name,
                 category: category,
@@ -2131,114 +2298,115 @@
                 images: images,
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             };
-            
+
             if (editingProductId) {
                 // Update existing product
                 db.collection('products').doc(editingProductId).update(productData)
-                .then(() => {
-                    alert('Product updated successfully!');
-                    resetProductForm();
-                    loadProducts();
-                })
-                .catch(error => {
-                    alert('Error updating product: ' + error.message);
-                });
+                    .then(() => {
+                        alert('Product updated successfully!');
+                        trackAdminAction('product_update', { product_id: editingProductId, product_name: name });
+                        resetProductForm();
+                        loadProducts();
+                    })
+                    .catch(error => {
+                        alert('Error updating product: ' + error.message);
+                    });
             } else {
                 // Add new product
                 productData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-                
+
                 db.collection('products').add(productData)
-                .then(() => {
-                    alert('Product added successfully!');
-                    resetProductForm();
-                    loadProducts();
-                })
-                .catch(error => {
-                    alert('Error adding product: ' + error.message);
-                });
+                    .then((docRef) => {
+                        alert('Product added successfully!');
+                        trackAdminAction('product_add', { product_id: docRef.id, product_name: name });
+                        resetProductForm();
+                        loadProducts();
+                    })
+                    .catch(error => {
+                        alert('Error adding product: ' + error.message);
+                    });
             }
         }
-
         // Edit product
-      // Edit product - Update this function
-function editProduct(productId) {
-  const product = products.find(p => p.id === productId);
-  if (!product) return;
-  
-  // Populate form with product data
-  document.getElementById('product-name').value = product.name;
-  document.getElementById('product-category').value = product.category;
-  document.getElementById('product-price').value = product.price || 0;
-  document.getElementById('product-discount').value = product.discount || 0;
-  document.getElementById('product-size').value = product.size;
-  document.getElementById('product-material').value = product.material;
-  
-  // Set colors in the color picker
-  if (product.colors && product.colors.length > 0) {
-    // This will be handled by the color picker initialization
-    // We'll need to store the colors temporarily and then initialize the picker
-    setTimeout(() => {
-      const selectedColorsContainer = document.getElementById('selected-colors');
-      const productColorsInput = document.getElementById('product-colors');
-      
-      // Clear existing colors
-      selectedColorsContainer.innerHTML = '';
-      
-      // Add each color
-      product.colors.forEach(color => {
-        const colorChip = document.createElement('div');
-        colorChip.className = 'selected-color-chip';
-        
-        const colorPreview = document.createElement('div');
-        colorPreview.className = 'selected-color-preview';
-        colorPreview.style.backgroundColor = color;
-        
-        const colorName = document.createElement('span');
-        colorName.textContent = color;
-        
-        const removeBtn = document.createElement('button');
-        removeBtn.className = 'remove-color';
-        removeBtn.innerHTML = '&times;';
-        removeBtn.onclick = () => {
-          colorChip.remove();
-          updateProductColorsInputFromChips();
-        };
-        
-        colorChip.appendChild(colorPreview);
-        colorChip.appendChild(colorName);
-        colorChip.appendChild(removeBtn);
-        
-        selectedColorsContainer.appendChild(colorChip);
-      });
-      
-      // Update the hidden input
-      productColorsInput.value = product.colors.join(', ');
-    }, 100);
-  }
-  
-  document.getElementById('product-images').value = product.images.join('\n');
-  
-  // Update form for editing
-  editingProductId = productId;
-  addProductTitle.textContent = 'Edit Product';
-  productSubmitBtn.textContent = 'Update Product';
-  
-  // Switch to add product tab
-  switchAdminTab('add-product');
-}
+        // Edit product - Update this function
+        function editProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
 
-// Helper function to update colors input from chips
-function updateProductColorsInputFromChips() {
-  const selectedColorsContainer = document.getElementById('selected-colors');
-  const productColorsInput = document.getElementById('product-colors');
-  const colorChips = selectedColorsContainer.querySelectorAll('.selected-color-chip');
-  
-  const colors = Array.from(colorChips).map(chip => {
-    return chip.querySelector('span').textContent;
-  });
-  
-  productColorsInput.value = colors.join(', ');
-}
+            // Populate form with product data
+            document.getElementById('product-name').value = product.name;
+            document.getElementById('product-category').value = product.category;
+            document.getElementById('product-price').value = product.price || 0;
+            document.getElementById('product-discount').value = product.discount || 0;
+            document.getElementById('product-size').value = product.size;
+            document.getElementById('product-material').value = product.material;
+
+            // Set colors in the color picker
+            if (product.colors && product.colors.length > 0) {
+                // This will be handled by the color picker initialization
+                // We'll need to store the colors temporarily and then initialize the picker
+                setTimeout(() => {
+                    const selectedColorsContainer = document.getElementById('selected-colors');
+                    const productColorsInput = document.getElementById('product-colors');
+
+                    // Clear existing colors
+                    selectedColorsContainer.innerHTML = '';
+
+                    // Add each color
+                    product.colors.forEach(color => {
+                        const colorChip = document.createElement('div');
+                        colorChip.className = 'selected-color-chip';
+
+                        const colorPreview = document.createElement('div');
+                        colorPreview.className = 'selected-color-preview';
+                        colorPreview.style.backgroundColor = color;
+
+                        const colorName = document.createElement('span');
+                        colorName.textContent = color;
+
+                        const removeBtn = document.createElement('button');
+                        removeBtn.className = 'remove-color';
+                        removeBtn.innerHTML = '&times;';
+                        removeBtn.onclick = () => {
+                            colorChip.remove();
+                            updateProductColorsInputFromChips();
+                        };
+
+                        colorChip.appendChild(colorPreview);
+                        colorChip.appendChild(colorName);
+                        colorChip.appendChild(removeBtn);
+
+                        selectedColorsContainer.appendChild(colorChip);
+                    });
+
+                    // Update the hidden input
+                    productColorsInput.value = product.colors.join(', ');
+                }, 100);
+            }
+
+            document.getElementById('product-images').value = product.images.join('\n');
+
+            // Update form for editing
+            editingProductId = productId;
+            addProductTitle.textContent = 'Edit Product';
+            productSubmitBtn.textContent = 'Update Product';
+
+            // Switch to add product tab
+            switchAdminTab('add-product');
+        }
+
+        // Helper function to update colors input from chips
+        function updateProductColorsInputFromChips() {
+            const selectedColorsContainer = document.getElementById('selected-colors');
+            const productColorsInput = document.getElementById('product-colors');
+            const colorChips = selectedColorsContainer.querySelectorAll('.selected-color-chip');
+
+            const colors = Array.from(colorChips).map(chip => {
+                return chip.querySelector('span').textContent;
+            });
+
+            productColorsInput.value = colors.join(', ');
+        }
 
         // Reset product form
         function resetProductForm() {
@@ -2251,35 +2419,37 @@ function updateProductColorsInputFromChips() {
         // Handle add category
         function handleAddCategory(e) {
             e.preventDefault();
-            
+
             if (!currentUser || currentUser.email !== 'tosifshaikh1707@gmail.com') {
                 alert('Only admin can add categories');
                 return;
             }
-            
+
             const name = document.getElementById('category-name').value;
-            
+
             // Add category to Firestore
             db.collection('categories').add({
                 name: name,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             })
-            .then(() => {
-                alert('Category added successfully!');
-                addCategoryForm.reset();
-                loadCategories();
-            })
-            .catch(error => {
-                alert('Error adding category: ' + error.message);
-            });
+                .then(() => {
+                    alert('Category added successfully!');
+                    addCategoryForm.reset();
+                    loadCategories();
+                })
+                .catch(error => {
+                    alert('Error adding category: ' + error.message);
+                });
         }
 
         // Delete product
         function deleteProduct(productId) {
             if (confirm('Are you sure you want to delete this product?')) {
+                const product = products.find(p => p.id === productId);
                 db.collection('products').doc(productId).delete()
                     .then(() => {
                         alert('Product deleted successfully!');
+                        trackAdminAction('product_delete', { product_id: productId, product_name: product ? product.name : 'unknown' });
                         loadProducts();
                     })
                     .catch(error => {
@@ -2302,141 +2472,189 @@ function updateProductColorsInputFromChips() {
             }
         }
 
-// Color Picker Functionality
-function initColorPicker() {
-  const colorPalette = document.getElementById('color-palette');
-  const customColorInput = document.getElementById('custom-color-input');
-  const customColorPreview = document.getElementById('custom-color-preview');
-  const addCustomColorBtn = document.getElementById('add-custom-color');
-  const selectedColorsContainer = document.getElementById('selected-colors');
-  const productColorsInput = document.getElementById('product-colors');
-  
-  let selectedColors = [];
-  
-  // Initialize color preview
-  customColorPreview.style.backgroundColor = '#FFFFFF';
-  
-  // Update color preview when custom color input changes
-  customColorInput.addEventListener('input', function() {
-    const colorValue = this.value.trim();
-    if (isValidColor(colorValue)) {
-      customColorPreview.style.backgroundColor = colorValue;
-    }
-  });
-  
-  // Add color from palette
-  colorPalette.addEventListener('click', function(e) {
-    if (e.target.classList.contains('color-option')) {
-      const color = e.target.getAttribute('data-color');
-      addColor(color);
-    }
-  });
-  
-  // Add custom color
-  addCustomColorBtn.addEventListener('click', function() {
-    const colorValue = customColorInput.value.trim();
-    if (colorValue && isValidColor(colorValue)) {
-      addColor(colorValue);
-      customColorInput.value = '';
-      customColorPreview.style.backgroundColor = '#FFFFFF';
-    } else {
-      alert('Please enter a valid color name or hex code');
-    }
-  });
-  
-  // Add color to selected colors
-  function addColor(color) {
-    // Check if color is already selected
-    if (!selectedColors.includes(color)) {
-      selectedColors.push(color);
-      updateSelectedColorsDisplay();
-      updateProductColorsInput();
-    }
-  }
-  
-  // Remove color from selected colors
-  function removeColor(color) {
-    selectedColors = selectedColors.filter(c => c !== color);
-    updateSelectedColorsDisplay();
-    updateProductColorsInput();
-  }
-  
-  // Update the display of selected colors
-  function updateSelectedColorsDisplay() {
-    selectedColorsContainer.innerHTML = '';
-    
-    if (selectedColors.length === 0) {
-      selectedColorsContainer.innerHTML = '<p style="color: #999; margin: 0;">No colors selected</p>';
-      return;
-    }
-    
-    selectedColors.forEach(color => {
-      const colorChip = document.createElement('div');
-      colorChip.className = 'selected-color-chip';
-      
-      const colorPreview = document.createElement('div');
-      colorPreview.className = 'selected-color-preview';
-      colorPreview.style.backgroundColor = getColorValue(color);
-      
-      const colorName = document.createElement('span');
-      colorName.textContent = color;
-      
-      const removeBtn = document.createElement('button');
-      removeBtn.className = 'remove-color';
-      removeBtn.innerHTML = '&times;';
-      removeBtn.onclick = () => removeColor(color);
-      
-      colorChip.appendChild(colorPreview);
-      colorChip.appendChild(colorName);
-      colorChip.appendChild(removeBtn);
-      
-      selectedColorsContainer.appendChild(colorChip);
-    });
-  }
-  
-  // Update the hidden input with selected colors
-  function updateProductColorsInput() {
-    productColorsInput.value = selectedColors.join(', ');
-  }
-  
-  // Check if a color value is valid
-  function isValidColor(color) {
-    // Check if it's a valid CSS color
-    const s = new Option().style;
-    s.color = color;
-    return s.color !== '';
-  }
-  
-  // Get the actual color value for display
-  function getColorValue(color) {
-    const s = new Option().style;
-    s.color = color;
-    return s.color || color;
-  }
-  
-  // Initialize with empty selected colors
-  updateSelectedColorsDisplay();
-}
+        // Color Picker Functionality
+        function initColorPicker() {
+            const colorPalette = document.getElementById('color-palette');
+            const customColorInput = document.getElementById('custom-color-input');
+            const customColorPreview = document.getElementById('custom-color-preview');
+            const addCustomColorBtn = document.getElementById('add-custom-color');
+            const selectedColorsContainer = document.getElementById('selected-colors');
+            const productColorsInput = document.getElementById('product-colors');
 
-// Call this function when the DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-  initColorPicker();
-  
-  // Also call it when switching to the add product tab
-  const originalSwitchAdminTab = switchAdminTab;
-  switchAdminTab = function(tabName) {
-    originalSwitchAdminTab(tabName);
-    if (tabName === 'add-product') {
-      // Reinitialize color picker when switching to add product tab
-      setTimeout(initColorPicker, 100);
-    }
-  };
-});
+            let selectedColors = [];
 
-        import { Analytics } from "@vercel/analytics/next"
+            // Initialize color preview
+            customColorPreview.style.backgroundColor = '#FFFFFF';
+
+            // Update color preview when custom color input changes
+            customColorInput.addEventListener('input', function () {
+                const colorValue = this.value.trim();
+                if (isValidColor(colorValue)) {
+                    customColorPreview.style.backgroundColor = colorValue;
+                }
+            });
+
+            // Add color from palette
+            colorPalette.addEventListener('click', function (e) {
+                if (e.target.classList.contains('color-option')) {
+                    const color = e.target.getAttribute('data-color');
+                    addColor(color);
+                }
+            });
+
+            // Add custom color
+            addCustomColorBtn.addEventListener('click', function () {
+                const colorValue = customColorInput.value.trim();
+                if (colorValue && isValidColor(colorValue)) {
+                    addColor(colorValue);
+                    customColorInput.value = '';
+                    customColorPreview.style.backgroundColor = '#FFFFFF';
+                } else {
+                    alert('Please enter a valid color name or hex code');
+                }
+            });
+
+            // Add color to selected colors
+            function addColor(color) {
+                // Check if color is already selected
+                if (!selectedColors.includes(color)) {
+                    selectedColors.push(color);
+                    updateSelectedColorsDisplay();
+                    updateProductColorsInput();
+                }
+            }
+
+            // Remove color from selected colors
+            function removeColor(color) {
+                selectedColors = selectedColors.filter(c => c !== color);
+                updateSelectedColorsDisplay();
+                updateProductColorsInput();
+            }
+
+            // Update the display of selected colors
+            function updateSelectedColorsDisplay() {
+                selectedColorsContainer.innerHTML = '';
+
+                if (selectedColors.length === 0) {
+                    selectedColorsContainer.innerHTML = '<p style="color: #999; margin: 0;">No colors selected</p>';
+                    return;
+                }
+
+                selectedColors.forEach(color => {
+                    const colorChip = document.createElement('div');
+                    colorChip.className = 'selected-color-chip';
+
+                    const colorPreview = document.createElement('div');
+                    colorPreview.className = 'selected-color-preview';
+                    colorPreview.style.backgroundColor = getColorValue(color);
+
+                    const colorName = document.createElement('span');
+                    colorName.textContent = color;
+
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'remove-color';
+                    removeBtn.innerHTML = '&times;';
+                    removeBtn.onclick = () => removeColor(color);
+
+                    colorChip.appendChild(colorPreview);
+                    colorChip.appendChild(colorName);
+                    colorChip.appendChild(removeBtn);
+
+                    selectedColorsContainer.appendChild(colorChip);
+                });
+            }
+
+            // Update the hidden input with selected colors
+            function updateProductColorsInput() {
+                productColorsInput.value = selectedColors.join(', ');
+            }
+
+            // Check if a color value is valid
+            function isValidColor(color) {
+                // Check if it's a valid CSS color
+                const s = new Option().style;
+                s.color = color;
+                return s.color !== '';
+            }
+
+            // Get the actual color value for display
+            function getColorValue(color) {
+                const s = new Option().style;
+                s.color = color;
+                return s.color || color;
+            }
+
+            // Initialize with empty selected colors
+            updateSelectedColorsDisplay();
+        }
+
+        // Call this function when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            initColorPicker();
+
+            // Also call it when switching to the add product tab
+            const originalSwitchAdminTab = switchAdminTab;
+            switchAdminTab = function (tabName) {
+                originalSwitchAdminTab(tabName);
+                if (tabName === 'add-product') {
+                    // Reinitialize color picker when switching to add product tab
+                    setTimeout(initColorPicker, 100);
+                }
+            };
+        });
+
+        // Add this function to load analytics data
+        function loadAnalytics() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayRef = db.collection('visitorStats').doc(today);
+
+            todayRef.get().then(doc => {
+                if (doc.exists) {
+                    document.getElementById('today-visitors').textContent = doc.data().count;
+                }
+            });
+
+            // Load product count
+            db.collection('products').get().then(snapshot => {
+                document.getElementById('total-products').textContent = snapshot.size;
+            });
+
+            // Load category count
+            db.collection('categories').get().then(snapshot => {
+                document.getElementById('total-categories').textContent = snapshot.size;
+            });
+        }
+
+        // Update the switchAdminTab function to load analytics when that tab is selected
+        function switchAdminTab(tabName) {
+            // Update active tab
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            const tabIndex = {
+                'products': 1,
+                'add-product': 2,
+                'categories': 3,
+                'analytics': 4
+            };
+
+            document.querySelector(`.admin-tab:nth-child(${tabIndex[tabName]})`).classList.add('active');
+
+            // Update active content
+            document.querySelectorAll('.admin-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`admin-${tabName}`).classList.add('active');
+
+            // Load analytics data when analytics tab is selected
+            if (tabName === 'analytics') {
+                loadAnalytics();
+            }
+        }
         // Initialize the app when DOM is loaded
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
-</html>
 
+</html>
