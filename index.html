@@ -344,7 +344,7 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: white;
+            background-color: hsl(0, 0%, 100%);
             width: 32px;
             height: 32px;
             border-radius: 50%;
@@ -372,6 +372,35 @@
             font-size: 16px;
             color: var(--primary);
             cursor: pointer;
+        }
+
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .current-price {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--dark);
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .discount {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 14px;
+            background-color: rgba(166, 124, 82, 0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
         }
 
         .product-actions {
@@ -523,6 +552,111 @@
             flex-wrap: wrap;
             align-items: center;
         }
+  /* Color Picker Styles */
+  .color-picker-container {
+    margin-bottom: 20px;
+  }
+  
+  .color-picker-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  
+  .color-palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .color-option {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+  }
+  
+  .color-option:hover {
+    transform: scale(1.1);
+  }
+  
+  .color-option.selected {
+    border-color: #333;
+    transform: scale(1.1);
+  }
+  
+  .custom-color-input {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .custom-color-preview {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+  }
+  
+  .custom-color-input input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  
+  .add-color-btn {
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  .selected-colors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    min-height: 50px;
+  }
+  
+  .selected-color-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .selected-color-preview {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+  }
+  
+  .remove-color {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999;
+    font-size: 14px;
+  }
+  
+  .remove-color:hover {
+    color: var(--danger);
+  }
 
         .color-chip {
             width: 20px;
@@ -994,13 +1128,54 @@
                 flex-wrap: wrap;
             }
         }
+        /*  */
+        /* Logo Styles */
+.logo {
+    text-align: center;
+}
+
+.logo-main {
+    font-family: 'Playfair Display', serif;
+    font-size: 35px;
+    font-weight: 700;
+    color: rgb(198, 178, 65);
+    letter-spacing: 5px;
+    line-height: 1;
+}
+
+.logo-subtitle {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 10px;
+    text-transform: uppercase;
+    margin-top: 2px;
+    font-weight: 400;
+}
+
+/* For mobile responsiveness */
+@media (max-width: 768px) {
+    .logo-main {
+        font-size: 28px;
+        letter-spacing: 4px;
+    }
+    
+    .logo-subtitle {
+        font-size: 10px;
+        letter-spacing: 7.2px;
+    }
+}
     </style>
 </head>
 <body>
     <!-- Header Section -->
     <header>
         <div class="container header-main">
-            <a href="#" class="logo">Kiswah</a>
+            <!-- Replace your current logo in the header with this: -->
+<div class="logo">
+    <div class="logo-main">KISWAH</div>
+    <div class="logo-subtitle">Collection</div>
+</div>
 
             <!-- Categories Dropdown -->
             <div class="categories-dropdown">
@@ -1018,11 +1193,6 @@
             </div>
 
             <div class="header-actions">
-                <div class="action-item" onclick="showWishlistPage()" style="position: relative;">
-                    <i class="fas fa-heart"></i>
-                    <span>Wishlist</span>
-                    <span class="wishlist-count">0</span>
-                </div>
                 <div class="action-item" id="account-btn" onclick="toggleAuthModal()">
                     <i class="fas fa-user"></i>
                     <span>Account</span>
@@ -1035,10 +1205,10 @@
         </div>
 
         <ul class="nav-links" id="nav-links">
-            <!-- <li class="mobile-only"><a href="#" onclick="showWishlistPage(); closeMobileMenu()">Wishlist</a></li> -->
-            <!-- <li class="mobile-only"><a href="#" onclick="toggleAuthModal(); closeMobileMenu()">Account</a></li> -->
-            <!-- <li class="mobile-only" id="admin-link-mobile" style="display: none;"><a href="#" onclick="showAdminPanel(); closeMobileMenu()">Admin</a></li> -->
+            <li class="mobile-only"><a href="#" onclick="toggleAuthModal(); closeMobileMenu()">Account</a></li>
+            <li class="mobile-only" id="admin-link-mobile" style="display: none;"><a href="#" onclick="showAdminPanel(); closeMobileMenu()">Admin</a></li>
         </ul>
+        <script async src="https://imgbb.com/upload.js"></script>
     </header>
 
     <!-- Main Content Area -->
@@ -1104,19 +1274,6 @@
         </section>
     </main>
 
-    <!-- Wishlist Page -->
-    <section id="wishlist-page" class="wishlist-page container">
-        <!-- <h2 class="section-title">My Wishlist</h2> -->
-        <div class="wishlist-grid" id="wishlist-container">
-            <!-- Wishlist items will be dynamically added here -->
-        </div>
-        <div class="empty-wishlist" id="empty-wishlist">
-            <i class="far fa-heart"></i>
-            <p>Your wishlist is empty</p>
-            <a href="#" class="btn" onclick="showHomePage()">Continue Shopping</a>
-        </div>
-    </section>
-
     <!-- Admin Panel -->
     <section id="admin-panel" class="admin-panel container">
         <div class="admin-header">
@@ -1139,6 +1296,8 @@
                             <th>Product ID</th>
                             <th>Name</th>
                             <th>Category</th>
+                            <th>Price</th>
+                            <th>Discount</th>
                             <th>Colors</th>
                             <th>Size</th>
                             <th>Material</th>
@@ -1168,6 +1327,14 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label for="product-price">Price (₹)</label>
+                    <input type="number" id="product-price" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-discount">Discount (%)</label>
+                    <input type="number" id="product-discount" min="0" max="100" step="1" value="0">
+                </div>
+                <div class="form-group">
                     <label for="product-size">Size</label>
                     <input type="text" id="product-size" placeholder="S, M, L, XL, XXL, XXXL" required>
                 </div>
@@ -1175,10 +1342,45 @@
                     <label for="product-material">Material</label>
                     <input type="text" id="product-material" required>
                 </div>
-                <div class="form-group">
-                    <label for="product-colors">Colors (comma separated)</label>
-                    <input type="text" id="product-colors" placeholder="White, Black, Blue, Red" required>
-                </div>
+               <!-- Replace the current product-colors form group with this: -->
+<div class="form-group">
+  <div class="color-picker-container">
+    <label class="color-picker-label">Colors</label>
+    
+    <div class="color-palette" id="color-palette">
+      <!-- Common clothing colors -->
+      <div class="color-option" style="background-color: #000000;" data-color="Black"></div>
+      <div class="color-option" style="background-color: #FFFFFF; border: 1px solid #ddd;" data-color="White"></div>
+      <div class="color-option" style="background-color: #808080;" data-color="Gray"></div>
+      <div class="color-option" style="background-color: #964B00;" data-color="Brown"></div>
+      <div class="color-option" style="background-color: #FF0000;" data-color="Red"></div>
+      <div class="color-option" style="background-color: #0000FF;" data-color="Blue"></div>
+      <div class="color-option" style="background-color: #008000;" data-color="Green"></div>
+      <div class="color-option" style="background-color: #FFFF00;" data-color="Yellow"></div>
+      <div class="color-option" style="background-color: #FFA500;" data-color="Orange"></div>
+      <div class="color-option" style="background-color: #800080;" data-color="Purple"></div>
+      <div class="color-option" style="background-color: #FFC0CB;" data-color="Pink"></div>
+      <div class="color-option" style="background-color: #A52A2A;" data-color="Maroon"></div>
+      <div class="color-option" style="background-color: #00FFFF;" data-color="Cyan"></div>
+      <div class="color-option" style="background-color: #4B0082;" data-color="Indigo"></div>
+      <div class="color-option" style="background-color: #FFD700;" data-color="Gold"></div>
+      <div class="color-option" style="background-color: #C0C0C0;" data-color="Silver"></div>
+    </div>
+    
+    <div class="custom-color-input">
+      <div class="custom-color-preview" id="custom-color-preview"></div>
+      <input type="text" id="custom-color-input" placeholder="Enter custom color name or hex code">
+      <button type="button" class="add-color-btn" id="add-custom-color">Add Color</button>
+    </div>
+    
+    <div class="selected-colors" id="selected-colors">
+      <!-- Selected colors will appear here -->
+    </div>
+    
+    <!-- Hidden input to store the selected colors for form submission -->
+    <input type="hidden" id="product-colors" name="product-colors" required>
+  </div>
+</div>
                 <div class="form-group">
                     <label for="product-images">Image URLs (one per line)</label>
                     <textarea id="product-images" rows="4" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg" required></textarea>
@@ -1330,7 +1532,6 @@
 
         // DOM Elements
         const mainContent = document.getElementById('main-content');
-        const wishlistPage = document.getElementById('wishlist-page');
         const adminPanel = document.getElementById('admin-panel');
         const productsContainer = document.getElementById('products-container');
         const skeletonLoading = document.getElementById('skeleton-loading');
@@ -1344,8 +1545,6 @@
         const adminLink = document.getElementById('admin-link');
         const adminLinkMobile = document.getElementById('admin-link-mobile');
         const scrollBtn = document.getElementById('scrollBtn');
-        const wishlistContainer = document.getElementById('wishlist-container');
-        const emptyWishlist = document.getElementById('empty-wishlist');
         const adminProductsList = document.getElementById('admin-products-list');
         const adminCategoriesList = document.getElementById('admin-categories-list');
         const addProductForm = document.getElementById('add-product-form');
@@ -1358,7 +1557,6 @@
         let currentUser = null;
         let products = [];
         let categories = [];
-        let wishlist = [];
         let editingProductId = null;
         let selectedCategory = 'all';
 
@@ -1388,7 +1586,6 @@
             // Load initial data
             loadCategories();
             loadProducts();
-            loadWishlist();
 
             // Set up event listeners
             setupEventListeners();
@@ -1467,6 +1664,56 @@
                 });
             }).catch(error => {
                 console.error("Error loading categories: ", error);
+                // If there's an error with security rules, use demo categories
+                console.log("Using demo categories due to security rules");
+                useDemoCategories();
+            });
+        }
+
+        // Use demo categories if Firestore security rules prevent access
+        function useDemoCategories() {
+            categories = [
+                { id: 'mens', name: 'Men\'s Collection' },
+                { id: 'womens', name: 'Women\'s Collection' },
+                { id: 'accessories', name: 'Accessories' }
+            ];
+            
+            categoriesContent.innerHTML = '';
+            adminCategoriesList.innerHTML = '';
+            productCategorySelect.innerHTML = '<option value="">Select Category</option>';
+            
+            // Add "All Products" option
+            const allProductsLink = document.createElement('a');
+            allProductsLink.href = '#';
+            allProductsLink.textContent = 'All Products';
+            allProductsLink.onclick = () => filterProductsByCategory('all');
+            categoriesContent.appendChild(allProductsLink);
+            
+            categories.forEach(category => {
+                // Add to categories dropdown
+                const categoryLink = document.createElement('a');
+                categoryLink.href = '#';
+                categoryLink.textContent = category.name;
+                categoryLink.onclick = () => filterProductsByCategory(category.id);
+                categoriesContent.appendChild(categoryLink);
+                
+                // Add to admin categories table
+                const categoryRow = document.createElement('tr');
+                categoryRow.innerHTML = `
+                    <td>${category.id}</td>
+                    <td>${category.name}</td>
+                    <td>
+                        <button class="btn-sm btn-edit">Edit</button>
+                        <button class="btn-sm btn-delete">Delete</button>
+                    </td>
+                `;
+                adminCategoriesList.appendChild(categoryRow);
+                
+                // Add to product category select
+                const categoryOption = document.createElement('option');
+                categoryOption.value = category.id;
+                categoryOption.textContent = category.name;
+                productCategorySelect.appendChild(categoryOption);
             });
         }
 
@@ -1494,6 +1741,8 @@
                         <td>${product.id}</td>
                         <td>${product.name}</td>
                         <td>${getCategoryName(product.category)}</td>
+                        <td>₹${product.price || 0}</td>
+                        <td>${product.discount || 0}%</td>
                         <td>${product.colors.join(', ')}</td>
                         <td>${product.size}</td>
                         <td>${product.material}</td>
@@ -1527,6 +1776,11 @@
             productCard.className = 'product-card';
             productCard.id = `product-${product.id}`;
             
+            // Calculate discounted price
+            const price = product.price || 0;
+            const discount = product.discount || 0;
+            const discountedPrice = price - (price * discount / 100);
+            
             // Generate color chips HTML
             const colorChips = product.colors.map(color => {
                 return `<div class="color-chip" style="background-color: ${color.toLowerCase()};" title="${color}"></div>`;
@@ -1555,12 +1809,18 @@
                             </div>
                         ` : ''}
                     </div>
-                    <div class="wishlist-btn" onclick="toggleWishlist('${product.id}')">
-                        <i class="${wishlist.includes(product.id) ? 'fas' : 'far'} fa-heart"></i>
-                    </div>
                 </div>
                 <div class="product-info">
                     <h3 class="product-title" onclick="toggleProductDetails('${product.id}')">${product.name}</h3>
+                    <div class="product-price">
+                        ${discount > 0 ? `
+                            <span class="current-price">₹${discountedPrice.toFixed(2)}</span>
+                            <span class="old-price">₹${price.toFixed(2)}</span>
+                            <span class="discount">${discount}% OFF</span>
+                        ` : `
+                            <span class="current-price">₹${price.toFixed(2)}</span>
+                        `}
+                    </div>
                     <div class="product-colors">
                         ${colorChips}
                         ${product.colors.length > 5 ? `<span class="color-more">+${product.colors.length - 5} more</span>` : ''}
@@ -1576,6 +1836,8 @@
                             <li><span>Material:</span> <span>${product.material}</span></li>
                             <li><span>Size:</span> <span>${product.size}</span></li>
                             <li><span>Colors:</span> <span>${product.colors.join(', ')}</span></li>
+                            ${price > 0 ? `<li><span>Price:</span> <span>₹${price.toFixed(2)}</span></li>` : ''}
+                            ${discount > 0 ? `<li><span>Discount:</span> <span>${discount}% OFF</span></li>` : ''}
                         </ul>
                     </div>
                 </div>
@@ -1635,86 +1897,17 @@
             productCard.classList.toggle('expanded', !isExpanded);
         }
 
-        // Toggle wishlist
-        function toggleWishlist(productId) {
-            const index = wishlist.indexOf(productId);
-            const wishlistBtn = document.querySelector(`#product-${productId} .wishlist-btn i`);
-            
-            if (index === -1) {
-                // Add to wishlist
-                wishlist.push(productId);
-                wishlistBtn.className = 'fas fa-heart';
-            } else {
-                // Remove from wishlist
-                wishlist.splice(index, 1);
-                wishlistBtn.className = 'far fa-heart';
-            }
-            
-            // Update wishlist count
-            document.querySelector('.wishlist-count').textContent = wishlist.length;
-            
-            // Save to localStorage
-            localStorage.setItem('kiswahWishlist', JSON.stringify(wishlist));
-            
-            // Update wishlist page if visible
-            if (wishlistPage.style.display === 'block') {
-                loadWishlist();
-            }
-        }
-
-        // Load wishlist from localStorage
-        function loadWishlist() {
-            const savedWishlist = localStorage.getItem('kiswahWishlist');
-            if (savedWishlist) {
-                wishlist = JSON.parse(savedWishlist);
-            }
-            
-            // Update wishlist count
-            document.querySelector('.wishlist-count').textContent = wishlist.length;
-            
-            // Update wishlist page
-            if (wishlist.length === 0) {
-                wishlistContainer.style.display = 'none';
-                emptyWishlist.style.display = 'block';
-            } else {
-                wishlistContainer.style.display = 'grid';
-                emptyWishlist.style.display = 'none';
-                
-                // Clear current wishlist display
-                wishlistContainer.innerHTML = '';
-                
-                // Add wishlist items
-                wishlist.forEach(productId => {
-                    const product = products.find(p => p.id === productId);
-                    if (product) {
-                        const wishlistItem = document.createElement('div');
-                        wishlistItem.className = 'product-card';
-                        wishlistItem.innerHTML = `
-                            <div class="product-image">
-                                <img src="${product.images[0]}" alt="${product.name}">
-                                <div class="wishlist-btn" onclick="toggleWishlist('${product.id}')">
-                                    <i class="fas fa-heart"></i>
-                                </div>
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title">${product.name}</h3>
-                                <div class="product-actions">
-                                    <button class="add-to-cart" onclick="openWhatsApp('${product.id}')">Ask for Enquiry</button>
-                                </div>
-                            </div>
-                        `;
-                        wishlistContainer.appendChild(wishlistItem);
-                    }
-                });
-            }
-        }
-
         // Open WhatsApp for product enquiry with image
         function openWhatsApp(productId) {
             const product = products.find(p => p.id === productId);
             if (product) {
+                // Calculate discounted price
+                const price = product.price || 0;
+                const discount = product.discount || 0;
+                const discountedPrice = price - (price * discount / 100);
+                
                 // Create a message with product details and image
-                const message = `Hello, I'm interested in this product: ${product.name}.\n\nProduct Details:\n- Material: ${product.material}\n- Size: ${product.size}\n- Colors: ${product.colors.join(', ')}\n\nPlease provide more details and pricing information.`;
+                const message = `Hello, I'm interested in this product: ${product.name}.\n\nProduct Details:\n- Material: ${product.material}\n- Size: ${product.size}\n- Colors: ${product.colors.join(', ')}\n- Price: ₹${price.toFixed(2)}${discount > 0 ? `\n- Discount: ${discount}% OFF\n- Final Price: ₹${discountedPrice.toFixed(2)}` : ''}\n\nPlease provide more details and availability information.`;
                 
                 // For WhatsApp, we can't directly send images in the initial message
                 // But we can include the image URL in the message
@@ -1789,7 +1982,6 @@
         // Show home page
         function showHomePage() {
             mainContent.style.display = 'block';
-            wishlistPage.style.display = 'none';
             adminPanel.style.display = 'none';
             // Reset category display
             categoryDisplay.style.display = 'none';
@@ -1798,19 +1990,10 @@
             filterProductsByCategory('all');
         }
 
-        // Show wishlist page
-        function showWishlistPage() {
-            mainContent.style.display = 'none';
-            wishlistPage.style.display = 'block';
-            adminPanel.style.display = 'none';
-            loadWishlist();
-        }
-
         // Show admin panel
         function showAdminPanel() {
             if (currentUser && currentUser.email === 'tosifshaikh1707@gmail.com') {
                 mainContent.style.display = 'none';
-                wishlistPage.style.display = 'none';
                 adminPanel.style.display = 'block';
             } else {
                 toggleAuthModal();
@@ -1930,6 +2113,8 @@
             
             const name = document.getElementById('product-name').value;
             const category = document.getElementById('product-category').value;
+            const price = parseFloat(document.getElementById('product-price').value);
+            const discount = parseInt(document.getElementById('product-discount').value) || 0;
             const size = document.getElementById('product-size').value;
             const material = document.getElementById('product-material').value;
             const colors = document.getElementById('product-colors').value.split(',').map(c => c.trim());
@@ -1938,6 +2123,8 @@
             const productData = {
                 name: name,
                 category: category,
+                price: price,
+                discount: discount,
                 size: size,
                 material: material,
                 colors: colors,
@@ -1973,26 +2160,85 @@
         }
 
         // Edit product
-        function editProduct(productId) {
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-            
-            // Populate form with product data
-            document.getElementById('product-name').value = product.name;
-            document.getElementById('product-category').value = product.category;
-            document.getElementById('product-size').value = product.size;
-            document.getElementById('product-material').value = product.material;
-            document.getElementById('product-colors').value = product.colors.join(', ');
-            document.getElementById('product-images').value = product.images.join('\n');
-            
-            // Update form for editing
-            editingProductId = productId;
-            addProductTitle.textContent = 'Edit Product';
-            productSubmitBtn.textContent = 'Update Product';
-            
-            // Switch to add product tab
-            switchAdminTab('add-product');
-        }
+      // Edit product - Update this function
+function editProduct(productId) {
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+  
+  // Populate form with product data
+  document.getElementById('product-name').value = product.name;
+  document.getElementById('product-category').value = product.category;
+  document.getElementById('product-price').value = product.price || 0;
+  document.getElementById('product-discount').value = product.discount || 0;
+  document.getElementById('product-size').value = product.size;
+  document.getElementById('product-material').value = product.material;
+  
+  // Set colors in the color picker
+  if (product.colors && product.colors.length > 0) {
+    // This will be handled by the color picker initialization
+    // We'll need to store the colors temporarily and then initialize the picker
+    setTimeout(() => {
+      const selectedColorsContainer = document.getElementById('selected-colors');
+      const productColorsInput = document.getElementById('product-colors');
+      
+      // Clear existing colors
+      selectedColorsContainer.innerHTML = '';
+      
+      // Add each color
+      product.colors.forEach(color => {
+        const colorChip = document.createElement('div');
+        colorChip.className = 'selected-color-chip';
+        
+        const colorPreview = document.createElement('div');
+        colorPreview.className = 'selected-color-preview';
+        colorPreview.style.backgroundColor = color;
+        
+        const colorName = document.createElement('span');
+        colorName.textContent = color;
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-color';
+        removeBtn.innerHTML = '&times;';
+        removeBtn.onclick = () => {
+          colorChip.remove();
+          updateProductColorsInputFromChips();
+        };
+        
+        colorChip.appendChild(colorPreview);
+        colorChip.appendChild(colorName);
+        colorChip.appendChild(removeBtn);
+        
+        selectedColorsContainer.appendChild(colorChip);
+      });
+      
+      // Update the hidden input
+      productColorsInput.value = product.colors.join(', ');
+    }, 100);
+  }
+  
+  document.getElementById('product-images').value = product.images.join('\n');
+  
+  // Update form for editing
+  editingProductId = productId;
+  addProductTitle.textContent = 'Edit Product';
+  productSubmitBtn.textContent = 'Update Product';
+  
+  // Switch to add product tab
+  switchAdminTab('add-product');
+}
+
+// Helper function to update colors input from chips
+function updateProductColorsInputFromChips() {
+  const selectedColorsContainer = document.getElementById('selected-colors');
+  const productColorsInput = document.getElementById('product-colors');
+  const colorChips = selectedColorsContainer.querySelectorAll('.selected-color-chip');
+  
+  const colors = Array.from(colorChips).map(chip => {
+    return chip.querySelector('span').textContent;
+  });
+  
+  productColorsInput.value = colors.join(', ');
+}
 
         // Reset product form
         function resetProductForm() {
@@ -2055,6 +2301,137 @@
                     });
             }
         }
+
+// Color Picker Functionality
+function initColorPicker() {
+  const colorPalette = document.getElementById('color-palette');
+  const customColorInput = document.getElementById('custom-color-input');
+  const customColorPreview = document.getElementById('custom-color-preview');
+  const addCustomColorBtn = document.getElementById('add-custom-color');
+  const selectedColorsContainer = document.getElementById('selected-colors');
+  const productColorsInput = document.getElementById('product-colors');
+  
+  let selectedColors = [];
+  
+  // Initialize color preview
+  customColorPreview.style.backgroundColor = '#FFFFFF';
+  
+  // Update color preview when custom color input changes
+  customColorInput.addEventListener('input', function() {
+    const colorValue = this.value.trim();
+    if (isValidColor(colorValue)) {
+      customColorPreview.style.backgroundColor = colorValue;
+    }
+  });
+  
+  // Add color from palette
+  colorPalette.addEventListener('click', function(e) {
+    if (e.target.classList.contains('color-option')) {
+      const color = e.target.getAttribute('data-color');
+      addColor(color);
+    }
+  });
+  
+  // Add custom color
+  addCustomColorBtn.addEventListener('click', function() {
+    const colorValue = customColorInput.value.trim();
+    if (colorValue && isValidColor(colorValue)) {
+      addColor(colorValue);
+      customColorInput.value = '';
+      customColorPreview.style.backgroundColor = '#FFFFFF';
+    } else {
+      alert('Please enter a valid color name or hex code');
+    }
+  });
+  
+  // Add color to selected colors
+  function addColor(color) {
+    // Check if color is already selected
+    if (!selectedColors.includes(color)) {
+      selectedColors.push(color);
+      updateSelectedColorsDisplay();
+      updateProductColorsInput();
+    }
+  }
+  
+  // Remove color from selected colors
+  function removeColor(color) {
+    selectedColors = selectedColors.filter(c => c !== color);
+    updateSelectedColorsDisplay();
+    updateProductColorsInput();
+  }
+  
+  // Update the display of selected colors
+  function updateSelectedColorsDisplay() {
+    selectedColorsContainer.innerHTML = '';
+    
+    if (selectedColors.length === 0) {
+      selectedColorsContainer.innerHTML = '<p style="color: #999; margin: 0;">No colors selected</p>';
+      return;
+    }
+    
+    selectedColors.forEach(color => {
+      const colorChip = document.createElement('div');
+      colorChip.className = 'selected-color-chip';
+      
+      const colorPreview = document.createElement('div');
+      colorPreview.className = 'selected-color-preview';
+      colorPreview.style.backgroundColor = getColorValue(color);
+      
+      const colorName = document.createElement('span');
+      colorName.textContent = color;
+      
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'remove-color';
+      removeBtn.innerHTML = '&times;';
+      removeBtn.onclick = () => removeColor(color);
+      
+      colorChip.appendChild(colorPreview);
+      colorChip.appendChild(colorName);
+      colorChip.appendChild(removeBtn);
+      
+      selectedColorsContainer.appendChild(colorChip);
+    });
+  }
+  
+  // Update the hidden input with selected colors
+  function updateProductColorsInput() {
+    productColorsInput.value = selectedColors.join(', ');
+  }
+  
+  // Check if a color value is valid
+  function isValidColor(color) {
+    // Check if it's a valid CSS color
+    const s = new Option().style;
+    s.color = color;
+    return s.color !== '';
+  }
+  
+  // Get the actual color value for display
+  function getColorValue(color) {
+    const s = new Option().style;
+    s.color = color;
+    return s.color || color;
+  }
+  
+  // Initialize with empty selected colors
+  updateSelectedColorsDisplay();
+}
+
+// Call this function when the DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  initColorPicker();
+  
+  // Also call it when switching to the add product tab
+  const originalSwitchAdminTab = switchAdminTab;
+  switchAdminTab = function(tabName) {
+    originalSwitchAdminTab(tabName);
+    if (tabName === 'add-product') {
+      // Reinitialize color picker when switching to add product tab
+      setTimeout(initColorPicker, 100);
+    }
+  };
+});
 
         // Initialize the app when DOM is loaded
         document.addEventListener('DOMContentLoaded', initApp);
