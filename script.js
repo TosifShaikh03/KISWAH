@@ -477,7 +477,7 @@
                 const imageUrl = product.images[0];
                 const fullMessage = `${message}\n\nProduct Image: ${imageUrl}`;
 
-                const url = `https://wa.me/919373186170?text=${encodeURIComponent(fullMessage)}`;
+                const url = `https://wa.me919423816556?text=${encodeURIComponent(fullMessage)}`;
                 window.open(url, '_blank');
             }
         }
@@ -485,7 +485,7 @@
         // Open WhatsApp for quick enquiry
         function openQuickWhatsApp() {
             const message = "Hello, I'm interested in your products. Can you please share your catalog?";
-            const url = `https://wa.me/919373186170?text=${encodeURIComponent(message)}`;
+            const url = `https://wa.me/919423816556?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
         }
 
