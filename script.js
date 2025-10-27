@@ -1008,3 +1008,243 @@
 
         // Initialize the app when DOM is loaded
         document.addEventListener('DOMContentLoaded', initApp);
+
+        // Add these functions to your existing script.js file
+
+// Open product detail modal
+function openProductModal(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    // Track product view
+    trackProductView(productId, product.name);
+
+    // Create modal HTML
+    const modalHTML = createProductModalHTML(product);
+    
+    // Add modal to body
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Show modal
+    const modal = document.getElementById(`product-modal-${productId}`);
+    modal.classList.add('active');
+    
+    // Setup image slider for modal
+    if (product.images.length > 1) {
+        setupModalImageSlider(modal, product.images.length);
+    }
+    
+    // Add event listeners for modal buttons
+    setupModalEventListeners(productId);
+}
+
+// Create product modal HTML
+function createProductModalHTML(product) {
+    // Calculate discounted price
+    const price = product.price || 0;
+    const discount = product.discount || 0;
+    const discountedPrice = price - (price * discount / 100);
+
+    // Generate color chips HTML
+    const colorChips = product.colors.map(color => {
+        return `<div class="product-modal-color-chip" style="background-color: ${color.toLowerCase()};" title="${color}"></div>`;
+    }).join('');
+
+    // Generate image slider HTML
+    const sliderImages = product.images.map((image, index) => {
+        return `<div class="product-modal-slide"><img src="${image}" alt="${product.name}" loading="lazy"></div>`;
+    }).join('');
+
+    const sliderDots = product.images.map((_, index) => {
+        return `<div class="product-modal-slider-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></div>`;
+    }).join('');
+
+    return `
+        <div class="product-modal" id="product-modal-${product.id}">
+            <div class="product-modal-content">
+                <div class="product-modal-close" onclick="closeProductModal('${product.id}')">&times;</div>
+                <div class="product-modal-body">
+                    <div class="product-modal-images">
+                        <div class="product-modal-image-slider">
+                            ${sliderImages}
+                        </div>
+                        ${product.images.length > 1 ? `
+                            <button class="product-modal-slider-btn product-modal-slider-prev"><i class="fas fa-chevron-left"></i></button>
+                            <button class="product-modal-slider-btn product-modal-slider-next"><i class="fas fa-chevron-right"></i></button>
+                            <div class="product-modal-slider-dots">
+                                ${sliderDots}
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div class="product-modal-info">
+                        <h2 class="product-modal-title">${product.name}</h2>
+                        <div class="product-modal-price">
+                            ${discount > 0 ? `
+                                <span class="product-modal-current-price">₹${discountedPrice.toFixed(2)}</span>
+                                <span class="product-modal-old-price">₹${price.toFixed(2)}</span>
+                                <span class="product-modal-discount">${discount}% OFF</span>
+                            ` : `
+                                <span class="product-modal-current-price">₹${price.toFixed(2)}</span>
+                            `}
+                        </div>
+                        <div class="product-modal-specs">
+                            <h3 class="product-modal-specs-title">Product Details</h3>
+                            <ul class="product-modal-specs-list">
+                                <li><span>Material:</span> <span>${product.material}</span></li>
+                                <li><span>Size:</span> <span>${product.size}</span></li>
+                                <li><span>Colors:</span> <span>${product.colors.join(', ')}</span></li>
+                                ${price > 0 ? `<li><span>Price:</span> <span>₹${price.toFixed(2)}</span></li>` : ''}
+                                ${discount > 0 ? `<li><span>Discount:</span> <span>${discount}% OFF</span></li>` : ''}
+                            </ul>
+                        </div>
+                        <div class="product-modal-colors">
+                            <h3 class="product-modal-colors-title">Available Colors</h3>
+                            <div class="product-modal-color-chips">
+                                ${colorChips}
+                            </div>
+                        </div>
+                        <div class="product-modal-actions">
+                            <button class="product-modal-action-btn product-modal-whatsapp-btn" onclick="openWhatsApp('${product.id}')">
+                                <i class="fab fa-whatsapp"></i> Ask for Enquiry
+                            </button>
+                            <button class="product-modal-action-btn product-modal-close-btn" onclick="closeProductModal('${product.id}')">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Setup modal image slider
+function setupModalImageSlider(modal, imageCount) {
+    const sliderImages = modal.querySelector('.product-modal-image-slider');
+    const prevBtn = modal.querySelector('.product-modal-slider-prev');
+    const nextBtn = modal.querySelector('.product-modal-slider-next');
+    const dots = modal.querySelectorAll('.product-modal-slider-dot');
+
+    let currentSlide = 0;
+
+    function goToSlide(index) {
+        if (index < 0) index = imageCount - 1;
+        if (index >= imageCount) index = 0;
+
+        currentSlide = index;
+        sliderImages.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+        // Update active dot
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentSlide);
+        });
+    }
+
+    prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+    nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => goToSlide(i));
+    });
+}
+
+// Setup modal event listeners
+function setupModalEventListeners(productId) {
+    const modal = document.getElementById(`product-modal-${productId}`);
+    
+    // Close modal when clicking outside content
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeProductModal(productId);
+        }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeProductModal(productId);
+        }
+    });
+}
+
+// Close product modal
+function closeProductModal(productId) {
+    const modal = document.getElementById(`product-modal-${productId}`);
+    if (modal) {
+        modal.classList.remove('active');
+        // Remove modal from DOM after animation
+        setTimeout(() => {
+            modal.remove();
+        }, 300);
+    }
+}
+
+// Update the product card creation to use modal instead of expandable details
+function createProductCard(product) {
+    const productCard = document.createElement('div');
+    productCard.className = 'product-card';
+    productCard.id = `product-${product.id}`;
+
+    // Calculate discounted price
+    const price = product.price || 0;
+    const discount = product.discount || 0;
+    const discountedPrice = price - (price * discount / 100);
+
+    // Generate color chips HTML
+    const colorChips = product.colors.map(color => {
+        return `<div class="color-chip" style="background-color: ${color.toLowerCase()};" title="${color}"></div>`;
+    }).join('');
+
+    // Generate image slider HTML
+    const sliderImages = product.images.map((image, index) => {
+        return `<div class="slide"><img src="${image}" alt="${product.name}" loading="lazy"></div>`;
+    }).join('');
+
+    const sliderDots = product.images.map((_, index) => {
+        return `<div class="slider-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></div>`;
+    }).join('');
+
+    productCard.innerHTML = `
+        <div class="product-image" onclick="openProductModal('${product.id}')">
+            <div class="image-slider">
+                <div class="slider-images">
+                    ${sliderImages}
+                </div>
+                ${product.images.length > 1 ? `
+                    <button class="slider-btn slider-prev"><i class="fas fa-chevron-left"></i></button>
+                    <button class="slider-btn slider-next"><i class="fas fa-chevron-right"></i></button>
+                    <div class="slider-dots">
+                        ${sliderDots}
+                    </div>
+                ` : ''}
+            </div>
+        </div>
+        <div class="product-info">
+            <h3 class="product-title" onclick="openProductModal('${product.id}')">${product.name}</h3>
+            <div class="product-price">
+                ${discount > 0 ? `
+                    <span class="current-price">₹${discountedPrice.toFixed(2)}</span>
+                    <span class="old-price">₹${price.toFixed(2)}</span>
+                    <span class="discount">${discount}% OFF</span>
+                ` : `
+                    <span class="current-price">₹${price.toFixed(2)}</span>
+                `}
+            </div>
+            <div class="product-colors">
+                ${colorChips}
+                ${product.colors.length > 5 ? `<span class="color-more">+${product.colors.length - 5} more</span>` : ''}
+            </div>
+            <div class="product-actions">
+                <button class="add-to-cart" onclick="openWhatsApp('${product.id}')">Ask for Enquiry</button>
+            </div>
+        </div>
+    `;
+
+    productsContainer.appendChild(productCard);
+
+    // Add event listeners for image slider if needed
+    if (product.images.length > 1) {
+        setupImageSlider(productCard, product.images.length);
+    }
+}
+
