@@ -1328,4 +1328,670 @@
             }
         }
 
-        
+        /*  */
+
+        /* Products Section - Responsive Grid */
+.products {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for mobile */
+    gap: 15px;
+    margin-bottom: 50px;
+    padding: 0 10px;
+}
+
+/* Product Card - Clean Design */
+.product-card {
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    position: relative;
+    width: 100%;
+    cursor: pointer;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Product image */
+.product-image {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+    background-color: #f9f9f9;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.05);
+}
+
+/* Clean product info - only basic details */
+.product-info {
+    padding: 15px;
+}
+
+.product-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--dark);
+    line-height: 1.3;
+    height: 40px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.product-price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+    flex-wrap: wrap;
+}
+
+.current-price {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--dark);
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: var(--gray);
+    font-size: 13px;
+}
+
+.discount {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 12px;
+    background-color: rgba(166, 124, 82, 0.1);
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+/* Remove colors display from card */
+.product-colors {
+    display: none;
+}
+
+/* Remove actions (Ask for Enquiry button) from card */
+.product-actions {
+    display: none;
+}
+
+/* Image slider - Remove navigation buttons from cards */
+.image-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.slider-images {
+    display: flex;
+    transition: transform 0.5s ease;
+    height: 100%;
+}
+
+.slide {
+    min-width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Remove slider buttons from product cards */
+.slider-btn {
+    display: none; /* Remove navigation buttons from cards */
+}
+
+/* Keep dots for multiple images */
+.slider-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 3;
+}
+
+.slider-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+}
+
+.slider-dot.active {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.2);
+}
+
+/* Section title styling */
+.section-title {
+    text-align: left;
+    margin: 30px 0 20px 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--primary);
+    padding-left: 10px;
+}
+
+.section-title:after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background-color: var(--accent);
+    margin: 10px 0 0 0;
+}
+
+/* Free delivery badge */
+.free-delivery {
+    color: var(--success);
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 4px;
+}
+
+/* Rating display */
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 5px;
+}
+
+.rating-stars {
+    color: #ffc107;
+    font-size: 12px;
+}
+
+.rating-value {
+    font-size: 12px;
+    color: var(--gray);
+    font-weight: 500;
+}
+
+.rating-count {
+    font-size: 11px;
+    color: var(--gray);
+}
+
+/* Responsive Grid Layout */
+/* Mobile First - 2 columns (already set above) */
+
+/* Tablets and larger phones */
+@media (min-width: 481px) and (max-width: 768px) {
+    .products {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on tablets */
+        gap: 20px;
+        padding: 0 15px;
+    }
+    
+    .product-image {
+        height: 220px;
+    }
+}
+
+/* Small laptops and large tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .products {
+        grid-template-columns: repeat(4, 1fr); /* 4 columns on small laptops */
+        gap: 25px;
+        padding: 0 20px;
+    }
+    
+    .product-image {
+        height: 250px;
+    }
+    
+    .product-info {
+        padding: 18px;
+    }
+    
+    .product-title {
+        font-size: 15px;
+    }
+    
+    .current-price {
+        font-size: 17px;
+    }
+}
+
+/* Desktop and larger screens */
+@media (min-width: 1025px) {
+    .products {
+        grid-template-columns: repeat(5, 1fr); /* 5 columns on desktop */
+        gap: 30px;
+        padding: 0 25px;
+    }
+    
+    .product-image {
+        height: 280px;
+    }
+    
+    .product-info {
+        padding: 20px;
+    }
+    
+    .product-title {
+        font-size: 16px;
+    }
+    
+    .current-price {
+        font-size: 18px;
+    }
+}
+
+/* For very small screens (below 360px) */
+@media (max-width: 360px) {
+    .products {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 0 8px;
+    }
+    
+    .product-image {
+        height: 170px;
+    }
+    
+    .product-info {
+        padding: 12px;
+    }
+    
+    .product-title {
+        font-size: 13px;
+        height: 36px;
+    }
+    
+    .current-price {
+        font-size: 15px;
+    }
+}
+
+/* Product Detail Modal Styles - Keep slider buttons only in modal */
+.product-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.product-modal.active {
+    display: flex;
+}
+
+.product-modal-content {
+    background-color: white;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 1000px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.product-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--gray);
+    background: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.product-modal-close:hover {
+    background: var(--accent);
+    color: white;
+    transform: scale(1.1);
+}
+
+.product-modal-body {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+.product-modal-images {
+    width: 100%;
+    height: 400px;
+    position: relative;
+    overflow: hidden;
+    background-color: #f9f9f9;
+}
+
+.product-modal-image-slider {
+    display: flex;
+    transition: transform 0.5s ease;
+    height: 100%;
+}
+
+.product-modal-slide {
+    min-width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-modal-slide img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Slider buttons ONLY in modal */
+.product-modal-slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 3;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.product-modal-slider-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.product-modal-slider-prev {
+    left: 15px;
+}
+
+.product-modal-slider-next {
+    right: 15px;
+}
+
+.product-modal-slider-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 3;
+}
+
+.product-modal-slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.product-modal-slider-dot.active {
+    background: rgba(0, 0, 0, 1);
+    transform: scale(1.3);
+}
+
+.product-modal-info {
+    padding: 30px;
+    flex: 1;
+}
+
+.product-modal-title {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--primary);
+    line-height: 1.3;
+    font-family: 'Playfair Display', serif;
+}
+
+.product-modal-price {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.product-modal-current-price {
+    font-weight: 700;
+    font-size: 32px;
+    color: var(--dark);
+}
+
+.product-modal-old-price {
+    text-decoration: line-through;
+    color: var(--gray);
+    font-size: 20px;
+}
+
+.product-modal-discount {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 16px;
+    background-color: rgba(166, 124, 82, 0.1);
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.product-modal-specs {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.product-modal-specs-title {
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--primary);
+    font-size: 18px;
+}
+
+.product-modal-specs-list {
+    list-style: none;
+}
+
+.product-modal-specs-list li {
+    margin-bottom: 12px;
+    display: flex;
+    padding: 6px 0;
+    font-size: 15px;
+}
+
+.product-modal-specs-list li span:first-child {
+    font-weight: 500;
+    min-width: 120px;
+    color: var(--gray);
+}
+
+.product-modal-colors {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.product-modal-colors-title {
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--primary);
+    font-size: 18px;
+}
+
+.product-modal-color-chips {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.product-modal-color-chip {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.product-modal-color-chip:hover {
+    transform: scale(1.15);
+}
+
+.product-modal-actions {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.product-modal-action-btn {
+    flex: 1;
+    min-width: 200px;
+    padding: 16px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.product-modal-whatsapp-btn {
+    background-color: #25D366;
+    color: white;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
+
+.product-modal-whatsapp-btn:hover {
+    background-color: #128C7E;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+}
+
+.product-modal-close-btn {
+    background-color: var(--gray);
+    color: white;
+}
+
+.product-modal-close-btn:hover {
+    background-color: var(--dark);
+    transform: translateY(-2px);
+}
+
+/* Responsive modal adjustments */
+@media (max-width: 768px) {
+    .product-modal {
+        padding: 10px;
+    }
+    
+    .product-modal-content {
+        max-height: 95vh;
+        border-radius: 12px;
+    }
+    
+    .product-modal-body {
+        flex-direction: column;
+    }
+    
+    .product-modal-images {
+        height: 300px;
+    }
+    
+    .product-modal-info {
+        padding: 20px;
+    }
+    
+    .product-modal-title {
+        font-size: 22px;
+    }
+    
+    .product-modal-current-price {
+        font-size: 26px;
+    }
+    
+    .product-modal-actions {
+        flex-direction: column;
+    }
+    
+    .product-modal-action-btn {
+        min-width: 100%;
+    }
+    
+    .product-modal-slider-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 769px) {
+    .product-modal-body {
+        flex-direction: row;
+    }
+    
+    .product-modal-images {
+        width: 50%;
+        height: 500px;
+    }
+    
+    .product-modal-info {
+        width: 50%;
+        padding: 40px;
+    }
+}
