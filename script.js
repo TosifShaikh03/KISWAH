@@ -473,11 +473,10 @@
                 const message = `Hello, I'm interested in this product: ${product.name}.\n\nProduct Details:\n- Material: ${product.material}\n- Size: ${product.size}\n- Colors: ${product.colors.join(', ')}\n- Price: ₹${price.toFixed(2)}${discount > 0 ? `\n- Discount: ${discount}% OFF\n- Final Price: ₹${discountedPrice.toFixed(2)}` : ''}\n\nPlease provide more details and availability information.`;
 
                 // For WhatsApp, we can't directly send images in the initial message
-                // But we can include the image URL in the message
                 const imageUrl = product.images[0];
                 const fullMessage = `${message}\n\nProduct Image: ${imageUrl}`;
 
-                const url = `https://wa.me 919423816556?text=${encodeURIComponent(fullMessage)}`;
+                const url = `https://wa.me/919423816556?text=${encodeURIComponent(fullMessage)}`;
                 window.open(url, '_blank');
             }
         }
@@ -485,7 +484,7 @@
         // Open WhatsApp for quick enquiry
         function openQuickWhatsApp() {
             const message = "Hello, I'm interested in your products. Can you please share your catalog?";
-            const url = `https://wa.me/ 919423816556?text=${encodeURIComponent(message)}`;
+            const url = `https://wa.me/919423816556?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
         }
 
